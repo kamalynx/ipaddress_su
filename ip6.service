@@ -1,0 +1,14 @@
+[Unit]
+Description=sanic server
+After=network.target auditd.service
+
+[Service]
+#ExecStart=/home/web/.local/bin/uv run sanic --port=8001 --host=::1 ipv6
+ExecStart=/home/web/.local/bin/uv run uvicorn app:app --host='::1' --port=8001 --forwarded-allow-ips='::1'
+WorkingDirectory=/home/web/ipaddress
+Restart=always
+User=web
+Group=web
+
+[Install]
+WantedBy=multi-user.target

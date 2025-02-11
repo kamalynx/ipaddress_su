@@ -1,0 +1,22 @@
+[project]
+name = "ipaddress-su"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = [
+    "django>=5.1.6",
+    "django-environ>=0.12.0",
+    "django-ipware>=7.0.1",
+    "dnspython>=2.7.0",
+    "gunicorn>=23.0.0",
+    "httpx[http2]>=0.28.1",
+    "jinja2>=3.1.5",
+    "markdown>=3.7",
+    "netaddr>=1.3.0",
+    "pillow>=11.1.0",
+    "starlette>=0.45.3",
+    "uuid6>=2024.7.10",
+    "uvicorn>=0.34.0",
+    "validators>=0.34.0",
+]

@@ -1,0 +1,166 @@
+:root {
+  --white-color: #fefefe;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: inherit;
+}
+
+html {
+  box-sizing: border-box;
+  font: 100%/1.5 sans-serif;
+}
+
+body {
+  background-color: whitesmoke;
+  color: #333;
+  margin: 0;
+  word-break: break-word;
+}
+
+pre,
+code {
+  word-break: break-word;
+  white-space: pre-line;
+}
+
+a {
+  color: #36c;
+}
+
+a:hover {
+  color: #f03;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  margin: 0 0 1rem 0;
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+}
+
+.container {
+  max-width: 60em;
+  margin: 0 auto;
+}
+
+.block {
+  padding: 2vmax;
+  margin-bottom: 1rem;
+}
+
+.block--white {
+  background-color: var(--white-color);
+}
+
+.block--ip {
+  display: flex;
+  flex-direction: column;
+  gap: 1vmax;
+  justify-content: space-between;
+}
+
+.block--ip > * {
+  flex-basis: 100%;
+}
+
+
+@media screen and (min-width: 40em) {
+  .block--ip {
+    flex-direction: row;
+  }
+}
+
+.navbar {
+  background-color: var(--white-color);
+  margin-bottom: 1rem;
+}
+
+.navbar a {
+  display: inline-block;
+  padding: 1rem;
+  color: #333;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.navbar a:hover,
+.navbar a:active {
+  color: #f03;
+}
+
+@media screen and (min-width: 40em) {
+  .navbar a {
+    display: inline-block;
+  }
+}
+
+.form {
+  margin-bottom: 1rem;
+  max-width: 100%;
+}
+
+.form__field,
+.form label {
+  font: inherit;
+}
+
+.form__field {
+  border-width: 1px;
+  border-style: solid;
+  padding: 5px 10px;
+  flex-grow: 2;
+  background-color: var(--white-color);
+}
+
+.form__error {
+  font-weight: bold;
+  color: #f00;
+}
+
+.button {
+  font: inherit;
+  font-weight: bold;
+  border-width: 1px;
+  border-style: solid;
+  padding: 5px 10px;
+  background-color: dodgerblue;
+  color: white;
+  border-color: dodgerblue;
+}
+
+.button:hover {
+  background-color: steelblue;
+  border-color: steelblue;
+}
+
+.button:active {
+  background-color: seagreen;
+  border-color: seagreen;
+}
+
+.form__group {
+  display: flex;
+  gap: 5px;
+}
+
+.ipaddress {
+  font-size: calc(1rem * 1.5);
+  font-weight: bold;
+}
+
+.table {
+  width: 100%;
+}
+
+.table td {
+  padding: 3px 5px;
+}
+
+.table tr:nth-child(odd) {
+  background-color: #eee;
+}

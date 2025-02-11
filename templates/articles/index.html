@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+
+{% block title %}Статьи{% endblock %}
+
+{% block body %}
+
+{% for article in articles %}
+  <article class="article block block--white">
+    <h2><a href="{{ article.get_absolute_url() }}">{{ article.title }}</a></h2>
+    <p><time datetime="{{ article.created_at.isoformat() }}">{{ article.created_at.strftime('%d.%m.%Y') }}</time></p>
+    <div id="content">{{ article.description }}</div>
+  </article>
+{% endfor %}
+
+{% endblock %}

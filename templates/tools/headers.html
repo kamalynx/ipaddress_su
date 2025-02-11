@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+
+{% block title %}Проверить заголовки сайта{% endblock %}
+
+{% block body %}
+
+<section class="block">
+  <h1>Проверить заголовки сайта</h1>
+  <pre><code>{% for k, v in headers.items() %}
+    {{ k }}: {{ v }}
+  {% endfor %}
+  </pre></code>
+</section>
+
+{% endblock %}

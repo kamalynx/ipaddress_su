@@ -1,0 +1,64 @@
+{% extends 'base.html' %}
+
+{% block title %}Информация об IP адресе{% endblock %}
+
+{% block head %}
+<meta name="description" content="С помощью этого инструмента вы можете узнать информацию об IP адресе.">
+{% endblock %}
+
+{% block body %}
+
+<section class="block">
+    <h1>Информация об IP адресе</h1>
+
+    <form class="form" method="post" novalidate>
+      {{ csrf_input }}
+
+      {{ form.ipaddress.label_tag() }}
+
+      <div class="form__group">
+        {{ form.ipaddress }}
+        <button class="button" name="submit">Проверить IP</button>
+      </div>
+
+      {% if form.ipaddress.errors %}
+        {% for error in form.ipaddress.errors %}
+          <p class="form__error">{{ error }}</p>
+        {% endfor %}
+      {% endif %}
+    </form>
+    {% if whois %}
+      <table class="table block block--white">
+        <tr>
+          <td>IP Адрес:</td>
+          <td>{{ whois['ipAddress'] }}</td>
+        </tr>
+        <tr>
+          <td>Широта:</td>
+          <td>{{ whois['latitude'] }}</td>
+        </tr>
+        <tr>
+          <td>Долгота:</td>
+          <td>{{ whois['longitude'] }}</td>
+        </tr>
+        <tr>
+          <td>Страна:</td>
+          <td>{{ whois['countryName'] }} / {{ whois['countryCode'] }}</td>
+        </tr>
+        <tr>
+          <td>Город:</td>
+          <td>{{ whois['cityName'] }}</td>
+        </tr>
+        <tr>
+          <td>Часовой пояс:</td>
+          <td>{{ whois['timeZone'] }}</td>
+        </tr>
+        <tr>
+          <td>Регион:</td>
+          <td>{{ whois['regionName'] }}</td>
+        </tr>
+      </table>
+    {% endif %}
+</section>
+
+{% endblock %}

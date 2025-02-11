@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ article }}{% endblock %}
+
+
+{% block head %}
+  {% if article.description %}<meta name="description" content="{{ article.description }}">{% endif %}
+{% endblock %}
+
+{% block body %}
+
+<article class="article block block--white">
+  <h1>{{ article.title }}</h1>
+  {% if article.image %}
+    <img src="{{ article.image.url }}">
+  {% endif %}
+  <div id="content">{{ article.content }}</div>
+</article>
+
+{% endblock %}

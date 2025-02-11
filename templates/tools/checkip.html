@@ -1,0 +1,59 @@
+{% extends 'base.html' %}
+
+{% block title %}Узнать IP домена{% endblock %}
+
+{% block head %}
+<meta name="description" content="С помощью этого инструмента вы можете узнать IP адрес (или несколько), на который ссылается домен.">
+{% endblock %}
+
+
+{% block body %}
+
+<section class="block">
+  <h1>Узнать IP адреса домена</h1>
+  <form class="form" method="post" novalidate>
+    {{ csrf_input }}
+
+    {{ form.domain.label_tag() }}
+
+    <div class="form__group">
+      {{ form.domain }}
+      <button class="button" name="submit">Показать IP</button>
+    </div>
+
+    {% if form.domain.errors %}
+      {% for error in form.domain.errors %}
+        <p class="form__error">{{ error }}</p>
+      {% endfor %}
+    {% endif %}
+  </form>
+
+  {% if ipsv4 and ipsv4 %}
+    <section class="block block--white">
+      <h2>IP адреса домена {{ domain }}:</h2>
+      <p><strong>IPv4</strong></p>
+      {% if ipsv4 is iterable %}
+        <ul>
+        {% for ip in ipsv4 %}
+          <li>{{ ip }}</li>
+        {% endfor %}
+        </ul>
+      {% else %}
+        <p>{{ ipsv4 }}</p>
+      {% endif %}
+
+      <p><strong>IPv6</strong></p>
+      {% if ipsv6 is iterable %}
+        <ul>
+        {% for ip in ipsv6 %}
+          <li>{{ ip }}</li>
+        {% endfor %}
+        </ul>
+      {% else %}
+        <p>{{ ipsv6 }}</p>
+      {% endif %}
+    </section>
+  {% endif %}
+</section>
+
+{% endblock %}
