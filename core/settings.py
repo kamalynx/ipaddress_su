@@ -124,10 +124,10 @@ USE_TZ = True
 
 STATIC_URL = "static/"
 STATICFILES_DIRS = [BASE_DIR / "static"]
-STATIC_ROOT = Path("/var/www/static")
+STATIC_ROOT = Path("/var/www/ipaddress.su/public/static")
 
 MEDIA_URL = "media/"
-MEDIA_ROOT = Path("/var/www/media")
+MEDIA_ROOT = Path("/var/www/ipaddress.su/public/media")
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
