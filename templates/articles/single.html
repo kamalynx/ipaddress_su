@@ -14,7 +14,7 @@
   {% if article.image %}
     <img src="{{ article.image.url }}">
   {% endif %}
-  <div id="content">{{ article.content }}</div>
+  <div id="content">{{ article.content|safe }}</div>
 </article>
 
 {% endblock %}
