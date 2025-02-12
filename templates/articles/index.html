@@ -10,6 +10,8 @@
     <p><time datetime="{{ article.created_at.isoformat() }}">{{ article.created_at.strftime('%d.%m.%Y') }}</time></p>
     <div id="content">{{ article.description }}</div>
   </article>
+{% empty %}
+  <h1>Статей, пока нет, но мы стараемся, пишем... :)</h1>
 {% endfor %}
 
 {% endblock %}
