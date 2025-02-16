@@ -35,7 +35,7 @@
       {% if ipsv4 is iterable %}
         <ul>
         {% for ip in ipsv4 %}
-          <li>{{ ip }}</li>
+          <li><a href="{{ url('tools:whois_with_ip', args=[ip]) }}">{{ ip }}</a></li>
         {% endfor %}
         </ul>
       {% else %}
@@ -46,7 +46,7 @@
       {% if ipsv6 is iterable %}
         <ul>
         {% for ip in ipsv6 %}
-          <li>{{ ip }}</li>
+          <li><a href="{{ url('tools:whois_with_ip', args=[ip]) }}">{{ ip }}</a></li>
         {% endfor %}
         </ul>
       {% else %}
