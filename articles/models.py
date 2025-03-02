@@ -1,6 +1,7 @@
 from django.db import models
 from django.urls import reverse_lazy
 from uuid6 import uuid7
+from tinymce import models as tinymce_models
 
 
 def article_directory_path(instance, filename):
@@ -13,7 +14,7 @@ class Article(models.Model):
     description = models.CharField(
         max_length=1024, verbose_name="описание", blank=True
     )
-    content = models.TextField(verbose_name="содержимое")
+    content = tinymce_models.HTMLField(verbose_name="содержимое")
     slug = models.SlugField(max_length=255, verbose_name="URI")
     image = models.ImageField(
         upload_to=article_directory_path,

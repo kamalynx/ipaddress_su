@@ -23,6 +23,7 @@ from tools.views import main
 
 urlpatterns = [
     path("panel/", admin.site.urls),
+    path('tinymce/', include('tinymce.urls')),
     path("articles/", include("articles.urls")),
     path("tools/", include("tools.urls")),
     path("", main, name="main"),
