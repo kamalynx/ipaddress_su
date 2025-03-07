@@ -33,7 +33,7 @@ class Article(models.Model):
     )
 
     class Meta:
-        ordering = ["created_at", "updated_at", "title"]
+        ordering = ["-created_at", "-updated_at", "title"]
         verbose_name = "статья"
         verbose_name_plural = "статьи"
 
