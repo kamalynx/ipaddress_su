@@ -75,7 +75,7 @@ def whois(request, input_ipaddress: str = None):
         except ValueError as err:
             raise Http404(err)
 
-        form = forms.DomainForm({'ipaddress': input_ipaddress})
+        form = forms.WhoisForm({'ipaddress': input_ipaddress})
 
         context["ipaddress"] = input_ipaddress
         context["whois"] = httpx.get(
@@ -83,3 +83,26 @@ def whois(request, input_ipaddress: str = None):
         ).json()
 
     return render(request, "tools/whois.html", context=context)
+
+
+def whois_domain(request, domain_name: str = None):
+    context = {}
+    form = forms.DomainForm()
+    context["form"] = form
+
+    if request.method == "POST":
+        form = forms.DomainForm(request.POST)
+        context["form"] = form
+
+        if form.is_valid():
+            domain_name = form.cleaned_data.get("domain")
+            return redirect("tools:whois_with_domain", str(domain_name))
+
+    if domain_name is not None:
+
+        form = forms.DomainForm({'domain': domain_name})
+
+        context["domain"] = domain_name
+        context["whois"] = domain_name
+
+    return render(request, 'tools/whois_domain.html', context=context)
