@@ -7,7 +7,7 @@ class ArticlesSitemap(Sitemap):
     priority = 0.5
 
     def items(self):
-        return Article.objects.filter(published=True).all()
+        return Article.published.all()
 
     def lastmod(self, obj):
         return obj.created_at

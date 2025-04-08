@@ -8,6 +8,12 @@ def article_directory_path(instance, filename):
     return f'uploads/articles/{instance.slug}/{filename}'
 
 
+class PublishedManager(models.Manager):
+
+    def get_queryset(self):
+        return super(PublishedManager, self).get_queryset().filter(is_published=True)
+
+
 class Article(models.Model):
     id = models.UUIDField(default=uuid7, editable=False, primary_key=True)
     title = models.CharField(max_length=255, verbose_name="заголовок")
@@ -22,7 +28,7 @@ class Article(models.Model):
         blank=True,
         verbose_name='изображение',
     )
-    published = models.BooleanField(
+    is_published = models.BooleanField(
         default=False, verbose_name='опубликовано?'
     )
     created_at = models.DateTimeField(
@@ -31,6 +37,9 @@ class Article(models.Model):
     updated_at = models.DateTimeField(
         verbose_name="дата обновления", auto_now=True
     )
+
+    objects = models.Manager()
+    published = PublishedManager()
 
     class Meta:
         ordering = ["-created_at", "-updated_at", "title"]
