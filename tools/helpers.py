@@ -31,3 +31,20 @@ async def a_do_nslookup(domain):
     result = await asyncio.gather(*tasks, return_exceptions=True)
 
     return result
+
+
+async def get_dns_records(domain):
+    common_records = ('a', 'aaaa', 'mx', 'txt', 'ns', 'soa')
+
+    tasks = [
+        asyncio.create_task(dns.asyncresolver.resolve(domain, record_type.capitalize()))
+        for record_type in common_records
+    ]
+
+    result = await asyncio.gather(*tasks, return_exceptions=True)
+
+    print([x for x in result])
+
+
+if __name__ == '__main__':
+    asyncio.run(get_dns_records('kamafish.ru'))
