@@ -16,13 +16,10 @@ from . import forms, helpers
 def main(request):
     client_ip, routable = get_client_ip(request)
 
-    with open("article.md") as file:
-        content = markdown(file.read())
-
     return render(
         request,
         "main.html",
-        context={"ipaddress": client_ip, "content": content},
+        context={"ipaddress": client_ip},
     )
 
 

@@ -8,10 +8,9 @@
 <div class="block">
   <section class="block block--white block--ip">
     <div>
-      <p>Ваш IP адрес:</p>
+      <p>Ваш <a title="Что такое IP адрес?" href="{{ url('articles:article', kwargs={'slug': 'what-is-ip-address'}) }}">IP адрес</a>:</p>
       <p class="ipaddress">{{ ipaddress }}</p>
     </div>
   </section>
-  <article>{{ content|safe }}</article>
 </div>
 {% endblock %}
