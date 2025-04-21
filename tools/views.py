@@ -4,27 +4,27 @@ import ipaddress
 import httpx
 import validators
 from django.shortcuts import render, redirect
+from django.urls import reverse_lazy
 from django.http import Http404
 from django.core.validators import validate_ipv46_address
 from django.core.exceptions import ValidationError
+from django.views.generic import TemplateView, FormView
 from ipware import get_client_ip
 from markdown import markdown
 
 from . import forms, helpers
 
 
-def main(request):
-    client_ip, routable = get_client_ip(request)
+class HomePage(TemplateView):
+    template_name = 'main.html'
 
-    return render(
-        request,
-        "main.html",
-        context={"ipaddress": client_ip},
-    )
+    def get_context_data(self, **kwargs):
+        """Add client ip to context data."""
 
+        client_ip = get_client_ip(self.request)[0]
+        kwargs['ipaddress'] = client_ip
 
-def tools_home(request):
-    return render(request, 'tools/tools.html')
+        return super(HomePage, self).get_context_data(**kwargs)
 
 
 def nslookup(request, domain: str = None):
@@ -51,6 +51,18 @@ def nslookup(request, domain: str = None):
         context["ipsv4"] = result[0]
         context["ipsv6"] = result[1]
     return render(request, "tools/checkip.html", context=context)
+
+
+class WhoisView(FormView):
+    template_name = 'tools/whois.html'
+    form_class = forms.WhoisForm
+
+    def form_valid(self, form):
+        print(form.cleaned_data['domain'])
+        return super().form_valid(form)
+
+    def get_success_url(self):
+        return reverse_lazy('tools:whois')
 
 
 def whois(request, input_ipaddress: str = None):

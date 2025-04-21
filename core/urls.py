@@ -22,7 +22,7 @@ from django.conf import settings
 from django.contrib.sitemaps.views import sitemap
 
 from articles.sitemaps import ArticlesSitemap
-from tools.views import main
+from tools.views import HomePage
 
 
 sitemaps = {
@@ -35,7 +35,7 @@ urlpatterns = [
     path("articles/", include("articles.urls")),
     path("tools/", include("tools.urls")),
     path("sitemap.xml", sitemap, {'sitemaps': sitemaps}, name="django.contrib.sitemaps.views.sitemap"),
-    path("", main, name="main"),
+    path("", HomePage.as_view(), name="main"),
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 
 

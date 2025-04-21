@@ -9,12 +9,13 @@
 
 {% block body %}
 
-<article class="article block block--white">
-  <h1>{{ article.title }}</h1>
+<article class="article block block--white" itemscope itemtype="http://schema.org/Article">
+  <h1 itemprop="headline">{{ article.title }}</h1>
+  <time datetime="{{ article.created_at.isoformat() }}">{{ article.created_at.strftime('%d.%m.%Y') }}</time>
   {% if article.image %}
     <img src="{{ article.image.url }}">
   {% endif %}
-  <div id="content">{{ article.content|safe }}</div>
+  <div id="content" itemprop="articleBody">{{ article.content|safe }}</div>
 </article>
 
 {% endblock %}
