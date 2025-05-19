@@ -44,6 +44,7 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
+    "django.middleware.locale.LocaleMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
@@ -56,9 +57,9 @@ ROOT_URLCONF = "core.urls"
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        # ~ "DIRS": [
-        # ~ BASE_DIR / 'templates',
-        # ~ ],
+        "DIRS": [
+            BASE_DIR / 'templates',
+        ],
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
@@ -69,17 +70,17 @@ TEMPLATES = [
             ],
         },
     },
-    {
-        "BACKEND": "django.template.backends.jinja2.Jinja2",
-        "DIRS": [
-            BASE_DIR / "templates",
-        ],
-        "APP_DIRS": True,
-        "OPTIONS": {
+    # ~ {
+        # ~ "BACKEND": "django.template.backends.jinja2.Jinja2",
+        # ~ "DIRS": [
+            # ~ BASE_DIR / "templates",
+        # ~ ],
+        # ~ "APP_DIRS": True,
+        # ~ "OPTIONS": {
             # ~ "match_extension": ".jinja",
-            "environment": "core.jinja2.environment",
-        },
-    },
+            # ~ "environment": "core.jinja2.environment",
+        # ~ },
+    # ~ },
 ]
 
 WSGI_APPLICATION = "core.wsgi.application"

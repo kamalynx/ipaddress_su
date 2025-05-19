@@ -12,9 +12,9 @@
     <h1>Информация о домене</h1>
 
     <form class="form" method="post" novalidate>
-      {{ csrf_input }}
+      {{ csrf }}
 
-      {{ form.domain.label_tag() }}
+      {{ form.domain.label_tag }}
 
       <div class="form__group">
         {{ form.domain }}

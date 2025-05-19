@@ -12,9 +12,9 @@
 <section class="block">
   <h1>Узнать IP адреса домена</h1>
   <form class="form" method="post" novalidate>
-    {{ csrf_input }}
+    {{ csrf }}
 
-    {{ form.domain.label_tag() }}
+    {{ form.domain.label_tag }}
 
     <div class="form__group">
       {{ form.domain }}
@@ -35,7 +35,7 @@
       {% if ipsv4 is iterable %}
         <ul>
         {% for ip in ipsv4 %}
-          <li><a href="{{ url('tools:whois_with_ip', args=[ip]) }}">{{ ip }}</a></li>
+          <li><a href="{% url 'tools:whois_with_ip' ip %}">{{ ip }}</a></li>
         {% endfor %}
         </ul>
       {% else %}
@@ -46,7 +46,7 @@
       {% if ipsv6 is iterable %}
         <ul>
         {% for ip in ipsv6 %}
-          <li><a href="{{ url('tools:whois_with_ip', args=[ip]) }}">{{ ip }}</a></li>
+          <li><a href="{% url 'tools:whois_with_ip' ip %}">{{ ip }}</a></li>
         {% endfor %}
         </ul>
       {% else %}

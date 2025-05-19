@@ -29,11 +29,11 @@ class HomePage(TemplateView):
 
 def nslookup(request, domain: str = None):
     context = {}
-    form = forms.DomainForm()
+    form = forms.WhoisForm()
     context["form"] = form
 
     if request.method == "POST":
-        form = forms.DomainForm(request.POST)
+        form = forms.WhoisForm(request.POST)
         context["form"] = form
 
         if form.is_valid():
@@ -41,7 +41,7 @@ def nslookup(request, domain: str = None):
             return redirect("tools:nslookup_with_domain", str(domain))
 
     if domain is not None:
-        form = forms.DomainForm({'domain': domain})
+        form = forms.WhoisForm({'domain': domain})
 
         if not validators.domain(domain):
             raise Http404("Домен некорректен")

@@ -9,7 +9,7 @@ from starlette.middleware.cors import CORSMiddleware
 
 
 async def get_ip(request: Request) -> JSONResponse:
-    return JSONResponse({'ipaddress': request.client.host})
+    return JSONResponse({'ip': request.client.host})
 
 
 app = Starlette(
@@ -17,10 +17,10 @@ app = Starlette(
         Route('/', get_ip),
     ),
     middleware=(
-        Middleware(CORSMiddleware, allow_origins=('https://ipaddress.su',)),
+        Middleware(CORSMiddleware, allow_origins=('http://*',)),
     ),
 )
 
 
 if __name__ == '__main__':
-    uvicorn.run('app:app', port=8001, host='::', forwarded_allow_ips='::')
+    uvicorn.run('app:app', port=8001, host='127.0.0.1', forwarded_allow_ips='127.0.0.1')
