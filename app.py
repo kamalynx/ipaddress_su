@@ -23,4 +23,4 @@ app = Starlette(
 
 
 if __name__ == '__main__':
-    uvicorn.run('app:app', port=8001, host='::1', forwarded_allow_ips='::1')
+    uvicorn.run('app:app', port=8001, host='::1', forwarded_allow_ips='::')
