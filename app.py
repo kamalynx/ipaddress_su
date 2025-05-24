@@ -17,7 +17,7 @@ app = Starlette(
         Route('/', get_ip),
     ),
     middleware=(
-        Middleware(CORSMiddleware, allow_origins=('*',)),
+        Middleware(CORSMiddleware, allow_origins=('https://ipaddress.su',)),
     ),
 )
 
