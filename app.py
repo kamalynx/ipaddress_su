@@ -17,10 +17,10 @@ app = Starlette(
         Route('/', get_ip),
     ),
     middleware=(
-        Middleware(CORSMiddleware, allow_origins=('http://*',)),
+        Middleware(CORSMiddleware, allow_origins=('*',)),
     ),
 )
 
 
 if __name__ == '__main__':
-    uvicorn.run('app:app', port=8001, host='127.0.0.1', forwarded_allow_ips='127.0.0.1')
+    uvicorn.run('app:app', port=8001, host='::1', forwarded_allow_ips='::1')

@@ -12,6 +12,6 @@ urlpatterns = [
     path("nslookup/<domain>/", views.nslookup, name="nslookup_with_domain"),
     # ~ path("ipinfo/", views.whois, name="whois"),
     # ~ path("ipinfo/<input_ipaddress>/", views.whois, name="whois_with_ip"),
-    path("whois/", views.WhoisView.as_view(), name="whois"),
-    path("whois/<domain_name>/", views.WhoisView.as_view(), name="whois_with_domain"),
+    path("whois/", views.whois_view, name="whois"),
+    path("whois/<domain>/", views.whois_view, name="whois_with_domain"),
 ]

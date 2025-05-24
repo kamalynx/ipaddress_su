@@ -1,5 +1,6 @@
 import asyncio
 import logging
+from collections.abc import Iterable
 
 import dns.asyncresolver
 import dns.resolver
@@ -29,6 +30,9 @@ async def a_do_nslookup(domain):
     ]
 
     result = await asyncio.gather(*tasks, return_exceptions=True)
+
+    for i in result:
+        print(isinstance(i, Iterable))
 
     return result
 

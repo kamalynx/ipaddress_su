@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 {% load i18n %}
 
-{% block title %}{% trans 'My IP address' %}{% endblock %}
+{% block title %}Мой IP адрес{% endblock %}
 
 
 {% block body %}
@@ -12,6 +12,29 @@
       <p>Ваш IP адрес:</p>
       <p class="ipaddress">{{ ipaddress }}</p>
     </div>
+    <div>
+      <p>Ваш IPv6 адрес:</p>
+      <p id="IPv6" class="ipaddress">вычисляем...</p>
+    </div>
   </section>
 </div>
+{% endblock %}
+
+
+{% block scripts %}
+<script>
+  document.addEventListener("DOMContentLoaded", (e) => {
+    const ipv6 = document.getElementById('IPv6');
+
+    fetch('//6.ipaddress.local:8001')
+      .then(response => response.json())
+      .then(data => {
+        ipv6.innerText = data.ip;
+      })
+      .catch(error => {
+        ipv6.innerText = '-';
+        console.error(error);
+      });
+  });
+</script>
 {% endblock %}

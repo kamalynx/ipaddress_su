@@ -11,7 +11,7 @@
 
 <article class="article block block--white" itemscope itemtype="http://schema.org/Article">
   <h1 itemprop="headline">{{ article.title }}</h1>
-  <time datetime="{{ article.created_at.isoformat() }}">{{ article.created_at.strftime('%d.%m.%Y') }}</time>
+  <time datetime="{{ article.created_at.isoformat }}">{{ article.created_at|date:'d.m.Y' }}</time>
   {% if article.image %}
     <img src="{{ article.image.url }}">
   {% endif %}

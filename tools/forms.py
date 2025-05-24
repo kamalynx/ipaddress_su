@@ -2,7 +2,7 @@ from django import forms
 from django.core.validators import DomainNameValidator, validate_ipv46_address
 
 
-class WhoisForm(forms.Form):
+class DomainForm(forms.Form):
     domain = forms.CharField(
         label="домен",
         widget=forms.TextInput(attrs={"class": "form__field"}),

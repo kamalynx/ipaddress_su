@@ -12,7 +12,7 @@
     <h1>Информация о домене</h1>
 
     <form class="form" method="post" novalidate>
-      {{ csrf }}
+      {% csrf_token %}
 
       {{ form.domain.label_tag }}
 
@@ -28,6 +28,9 @@
       {% endif %}
     </form>
 
+    {% if result %}
+    <pre><code>{{ result.text }}</code></pre>
+    {% endif %}
 </section>
 
 {% endblock %}

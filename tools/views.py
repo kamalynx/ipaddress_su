@@ -3,6 +3,7 @@ import ipaddress
 
 import httpx
 import validators
+import whois
 from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
 from django.http import Http404
@@ -29,19 +30,18 @@ class HomePage(TemplateView):
 
 def nslookup(request, domain: str = None):
     context = {}
-    form = forms.WhoisForm()
-    context["form"] = form
 
     if request.method == "POST":
-        form = forms.WhoisForm(request.POST)
-        context["form"] = form
+        form = forms.DomainForm(request.POST)
 
         if form.is_valid():
             domain = form.cleaned_data.get("domain")
             return redirect("tools:nslookup_with_domain", str(domain))
+    else:
+        form = forms.DomainForm()
 
     if domain is not None:
-        form = forms.WhoisForm({'domain': domain})
+        form = forms.DomainForm({'domain': domain})
 
         if not validators.domain(domain):
             raise Http404("Домен некорректен")
@@ -50,68 +50,43 @@ def nslookup(request, domain: str = None):
         context["domain"] = domain
         context["ipsv4"] = result[0]
         context["ipsv6"] = result[1]
+    context['form'] = form
     return render(request, "tools/checkip.html", context=context)
+
+
+def whois_view(request, domain: str = None):
+    context = {}
+
+    if request.method == "POST":
+        form = forms.DomainForm(request.POST)
+
+        if form.is_valid():
+            domain = form.cleaned_data.get("domain")
+            return redirect("tools:whois_with_domain", str(domain))
+    else:
+        form = forms.DomainForm()
+
+    if domain is not None:
+        form = forms.DomainForm({'domain': domain})
+
+        if not validators.domain(domain):
+            raise Http404("Домен некорректен")
+
+        result = whois.whois(domain)
+        context['result'] = result
+
+    context['form'] = form
+    return render(request, "tools/whois.html", context=context)
 
 
 class WhoisView(FormView):
     template_name = 'tools/whois.html'
-    form_class = forms.WhoisForm
+    form_class = forms.DomainForm
 
     def form_valid(self, form):
-        print(form.cleaned_data['domain'])
+        domain = form.cleaned_data['domain']
+        print(domain)
         return super().form_valid(form)
 
     def get_success_url(self):
         return reverse_lazy('tools:whois')
-
-
-def whois(request, input_ipaddress: str = None):
-    context = {}
-    form = forms.WhoisForm()
-    context["form"] = form
-
-    if request.method == "POST":
-        form = forms.WhoisForm(request.POST)
-        context["form"] = form
-
-        if form.is_valid():
-            input_ipaddress = form.cleaned_data.get("ipaddress")
-            return redirect("tools:whois_with_ip", str(input_ipaddress))
-
-    if input_ipaddress is not None:
-        try:
-            ipaddress.ip_address(input_ipaddress)
-        except ValueError as err:
-            raise Http404(err)
-
-        form = forms.WhoisForm({'ipaddress': input_ipaddress})
-
-        context["ipaddress"] = input_ipaddress
-        context["whois"] = httpx.get(
-            f"https://freeipapi.com/api/json/{input_ipaddress}"
-        ).json()
-
-    return render(request, "tools/whois.html", context=context)
-
-
-def whois_domain(request, domain_name: str = None):
-    context = {}
-    form = forms.DomainForm()
-    context["form"] = form
-
-    if request.method == "POST":
-        form = forms.DomainForm(request.POST)
-        context["form"] = form
-
-        if form.is_valid():
-            domain_name = form.cleaned_data.get("domain")
-            return redirect("tools:whois_with_domain", str(domain_name))
-
-    if domain_name is not None:
-
-        form = forms.DomainForm({'domain': domain_name})
-
-        context["domain"] = domain_name
-        context["whois"] = domain_name
-
-    return render(request, 'tools/whois_domain.html', context=context)

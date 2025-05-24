@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load tools_extras %}
 
 {% block title %}Узнать IP домена{% endblock %}
 
@@ -10,9 +11,9 @@
 {% block body %}
 
 <section class="block">
-  <h1>Узнать IP адреса домена</h1>
+  <h1>Узнать IP адреса домена {{ domain }}</h1>
   <form class="form" method="post" novalidate>
-    {{ csrf }}
+    {% csrf_token %}
 
     {{ form.domain.label_tag }}
 
@@ -32,10 +33,10 @@
     <section class="block block--white">
       <h2>IP адреса домена {{ domain }}:</h2>
       <p><strong>IPv4</strong></p>
-      {% if ipsv4 is iterable %}
+      {% if ipsv4|is_iterable %}
         <ul>
         {% for ip in ipsv4 %}
-          <li><a href="{% url 'tools:whois_with_ip' ip %}">{{ ip }}</a></li>
+          <li><a href="{# url 'tools:whois_with_ip' ip #}">{{ ip }}</a></li>
         {% endfor %}
         </ul>
       {% else %}
@@ -43,10 +44,10 @@
       {% endif %}
 
       <p><strong>IPv6</strong></p>
-      {% if ipsv6 is iterable %}
+      {% if ipsv6|is_iterable %}
         <ul>
         {% for ip in ipsv6 %}
-          <li><a href="{% url 'tools:whois_with_ip' ip %}">{{ ip }}</a></li>
+          <li><a href="{# url 'tools:whois_with_ip' ip #}">{{ ip }}</a></li>
         {% endfor %}
         </ul>
       {% else %}
