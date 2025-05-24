@@ -26,7 +26,7 @@
   document.addEventListener("DOMContentLoaded", (e) => {
     const ipv6 = document.getElementById('IPv6');
 
-    fetch('//6.ipaddress.local:8001')
+    fetch('//6.ipaddress.su')
       .then(response => response.json())
       .then(data => {
         ipv6.innerText = data.ip;
