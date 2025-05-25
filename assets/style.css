@@ -26,6 +26,12 @@ code {
   white-space: pre-wrap;
 }
 
+code {
+  background-color: whitesmoke;
+  padding: 3px 5px;
+  color: darkred;
+}
+
 a {
   color: #36c;
 }
