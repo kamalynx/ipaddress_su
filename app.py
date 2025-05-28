@@ -3,13 +3,13 @@ import uvicorn
 from starlette.applications import Starlette
 from starlette.routing import Route
 from starlette.requests import Request
-from starlette.responses import JSONResponse
+from starlette.responses import PlainTextResponse
 from starlette.middleware import Middleware
 from starlette.middleware.cors import CORSMiddleware
 
 
 async def get_ip(request: Request) -> JSONResponse:
-    return JSONResponse({'ip': request.client.host})
+    return PlainTextResponse(request.client.host)
 
 
 app = Starlette(

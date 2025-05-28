@@ -29,7 +29,7 @@
     fetch('//6.ipaddress.su', { headers: { 'Accept-Encoding': 'br, gzip' } })
       .then(response => response.json())
       .then(data => {
-        ipv6.innerText = data.ip;
+        ipv6.innerText = data;
       })
       .catch(error => {
         ipv6.innerText = '-';
