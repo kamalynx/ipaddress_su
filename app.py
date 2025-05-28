@@ -8,7 +8,7 @@ from starlette.middleware import Middleware
 from starlette.middleware.cors import CORSMiddleware
 
 
-async def get_ip(request: Request) -> JSONResponse:
+async def get_ip(request: Request) -> PlainTextResponse:
     return PlainTextResponse(request.client.host)
 
 
