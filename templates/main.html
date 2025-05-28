@@ -27,7 +27,7 @@
     const ipv6 = document.getElementById('IPv6');
 
     fetch('//6.ipaddress.su', { headers: { 'Accept-Encoding': 'br, gzip' } })
-      .then(response => response.json())
+      .then(response => response.text())
       .then(data => {
         ipv6.innerText = data;
       })
