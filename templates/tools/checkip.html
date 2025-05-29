@@ -36,7 +36,7 @@
       {% if ipsv4|is_iterable %}
         <ul>
         {% for ip in ipsv4 %}
-          <li><a href="{% url 'tools:ip_with_ip' ip %}">{{ ip }}</a></li>
+          <li><a href="{% url 'tools:ipinfo_with_ip' ip %}">{{ ip }}</a></li>
         {% endfor %}
         </ul>
       {% else %}
@@ -47,7 +47,7 @@
       {% if ipsv6|is_iterable %}
         <ul>
         {% for ip in ipsv6 %}
-          <li><a href="{% url 'tools:ip_with_ip' ip %}">{{ ip }}</a></li>
+          <li><a href="{% url 'tools:ipinfo_with_ip' ip %}">{{ ip }}</a></li>
         {% endfor %}
         </ul>
       {% else %}
