@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 {% load tools_extras %}
 
-{% block title %}Узнать IP домена {{ domain }}{% endblock %}
+{% block title %}{% if not domain %}Узнать IP домена{% else %}IP адреса домена {{ domain }}{% endif %}{% endblock %}
 
 {% block head %}
 <meta name="description" content="С помощью этого инструмента вы можете узнать IP адрес (или несколько), на который ссылается домен.">
@@ -11,7 +11,7 @@
 {% block body %}
 
 <section class="block block--white">
-  <h1>Узнать IP адреса домена {{ domain }}</h1>
+  <h1>{% if not domain %}Узнать IP домена{% else %}IP адреса домена {{ domain }}{% endif %}</h1>
   <form class="form" method="post" novalidate>
     {% csrf_token %}
 
