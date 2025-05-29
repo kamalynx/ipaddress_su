@@ -1,0 +1,93 @@
+{% extends 'base.html' %}
+
+{% block title %}Информация об IP{% endblock %}
+
+{% block head %}
+<meta name="description" content="Узнать информацию о IP адресе.">
+{% endblock %}
+
+{% block body %}
+
+<section class="block block--white">
+  <h1>Информация о домене {{ ip }}</h1>
+
+  <form class="form" method="post" novalidate>
+    {% csrf_token %}
+
+    {{ form.ipaddress.label_tag }}
+
+    <div class="form__group">
+      {{ form.ipaddress }}
+      <button class="button" name="submit">Проверить IP</button>
+    </div>
+
+    {% if form.ipaddress.errors %}
+      {% for error in form.ipaddress.errors %}
+        <p class="form__error">{{ error }}</p>
+      {% endfor %}
+    {% endif %}
+  </form>
+
+  {% if result %}
+    {% if result.status == 'fail' %}
+      <p>{{ result.message }}</p>
+    {% else %}
+      <table class="table">
+        <tr>
+          <td>Страна</td>
+          <td>{{ result.country }}</td>
+        </tr>
+        <tr>
+          <td>Код страны</td>
+          <td>{{ result.countryCode }}</td>
+        </tr>
+        <tr>
+          <td>Регион</td>
+          <td>{{ result.regionName }}</td>
+        </tr>
+        <tr>
+          <td>Город</td>
+          <td>{{ result.city }}</td>
+        </tr>
+        <tr>
+          <td>Часовой пояс</td>
+          <td>{{ result.timezone }}</td>
+        </tr>
+        <tr>
+          <td>Провайдер</td>
+          <td>{{ result.isp }}</td>
+        </tr>
+        <tr>
+          <td>Организация</td>
+          <td>{{ result.org }}</td>
+        </tr>
+        <tr>
+          <td>Сеть</td>
+          <td>{{ result.as }}</td>
+        </tr>
+        <tr>
+          <td>Имя хоста</td>
+          <td>{{ result.reverse }}</td>
+        </tr>
+        <tr>
+          <td>Мобильный?</td>
+          <td>{% if result.mobile %}Да{% else %}Нет{% endif %}</td>
+        </tr>
+        <tr>
+          <td>Прокси?</td>
+          <td>{% if result.proxy %}Да{% else %}Нет{% endif %}</td>
+        </tr>
+        <tr>
+          <td>Широта</td>
+          <td>{{ result.lat }}</td>
+        </tr>
+        <tr>
+          <td>Долгота</td>
+          <td>{{ result.lon }}</td>
+        </tr>
+      </table>
+    {% endif %}
+  {% endif %}
+</section>
+
+{% endblock %}

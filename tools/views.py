@@ -79,6 +79,55 @@ def whois_view(request, domain: str = None):
     return render(request, "tools/whois.html", context=context)
 
 
+def ipinfo_view(request, ip: str = None):
+    context = {}
+
+    if request.method == "POST":
+        form = forms.IPForm(request.POST)
+
+        if form.is_valid():
+            ip = form.cleaned_data.get("ipaddress")
+            return redirect("tools:ipinfo_with_ip", str(ip))
+    else:
+        form = forms.IPForm()
+
+    if ip is not None:
+        form = forms.IPForm({'ipaddress': ip})
+
+        # ~ if not validators.domain(domain):
+            # ~ raise Http404("Домен некорректен")
+
+        params = {
+            'lang': 'ru',
+            'fields': ','.join((
+                'status',
+                'message',
+                'country',
+                'countryCode',
+                'regionName',
+                'city',
+                'lat',
+                'lon',
+                'timezone',
+                'isp',
+                'org',
+                'as',
+                'reverse',
+                'mobile',
+                'proxy',
+                'query',
+            )),
+        }
+
+        with httpx.Client() as client:
+            result = client.get(f'http://ip-api.com/json/{ip}', params=params)
+
+        context['result'] = result.json()
+
+    context['form'] = form
+    return render(request, "tools/ipinfo.html", context=context)
+
+
 class WhoisView(FormView):
     template_name = 'tools/whois.html'
     form_class = forms.DomainForm
