@@ -125,6 +125,7 @@ def ipinfo_view(request, ip: str = None):
         context['result'] = result.json()
 
     context['form'] = form
+    context['ip'] = ip
     return render(request, "tools/ipinfo.html", context=context)
 
 

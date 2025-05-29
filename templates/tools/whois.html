@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 
-{% block title %}Информация о домене{% endblock %}
+{% block title %}Информация о домене {{ domain }}{% endblock %}
 
 {% block head %}
 <meta name="description" content="С помощью этого инструмента вы можете узнать информацию о доменном имени.">
@@ -9,7 +9,7 @@
 {% block body %}
 
 <section class="block block--white">
-    <h1>Информация о домене</h1>
+    <h1>Информация о домене {{ domain }}</h1>
 
     <form class="form" method="post" novalidate>
       {% csrf_token %}
