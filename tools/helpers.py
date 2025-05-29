@@ -1,9 +1,11 @@
 import asyncio
 import logging
+from io import BytesIO
 from collections.abc import Iterable
 
 import dns.asyncresolver
 import dns.resolver
+from playwright.async_api import async_playwright
 
 
 logger = logging.getLogger(__name__)
@@ -50,5 +52,15 @@ async def get_dns_records(domain):
     print([x for x in result])
 
 
+async def take_screenshot(url: str) -> bytes:
+    async with async_playwright() as pw:
+        browser = await pw.firefox.launch()
+        page = await browser.new_page()
+        await page.goto(url)
+        scr = await page.screenshot(scale='css')
+        return BytesIO(scr)
+
+
 if __name__ == '__main__':
-    asyncio.run(get_dns_records('kamafish.ru'))
+    # ~ asyncio.run(get_dns_records('kamafish.ru'))
+    print(asyncio.run(take_screenshot('https://ipaddress.su')))
