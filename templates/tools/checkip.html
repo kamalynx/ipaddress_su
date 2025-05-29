@@ -10,7 +10,7 @@
 
 {% block body %}
 
-<section class="block">
+<section class="block block--white">
   <h1>Узнать IP адреса домена {{ domain }}</h1>
   <form class="form" method="post" novalidate>
     {% csrf_token %}
@@ -36,7 +36,7 @@
       {% if ipsv4|is_iterable %}
         <ul>
         {% for ip in ipsv4 %}
-          <li><a href="{# url 'tools:whois_with_ip' ip #}">{{ ip }}</a></li>
+          <li><a href="{% url 'tools:ip_with_ip' ip %}">{{ ip }}</a></li>
         {% endfor %}
         </ul>
       {% else %}
@@ -47,7 +47,7 @@
       {% if ipsv6|is_iterable %}
         <ul>
         {% for ip in ipsv6 %}
-          <li><a href="{# url 'tools:whois_with_ip' ip #}">{{ ip }}</a></li>
+          <li><a href="{% url 'tools:ip_with_ip' ip %}">{{ ip }}</a></li>
         {% endfor %}
         </ul>
       {% else %}
