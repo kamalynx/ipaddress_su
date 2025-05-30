@@ -5,7 +5,6 @@
 
 {% block head %}
 <meta name="description" content="Определите IP адрес своего устройства с помощью этого сайта.">
-<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
 {% endblock %}
 
 {% block body %}
@@ -21,13 +20,11 @@
       <p id="IPv6" class="ipaddress">вычисляем...</p>
     </div>
   </section>
-  <div id ="map" style="width:800px; height:600px;"></div>
 </div>
 {% endblock %}
 
 
 {% block scripts %}
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
 <script>
   document.addEventListener("DOMContentLoaded", (e) => {
     const ipv6 = document.getElementById('IPv6');
@@ -43,19 +40,5 @@
       });
   });
 
-   // Creating map options
- var mapOptions = {
- center: [17.385044, 78.486671],
- zoom: 10
- }
-
- // Creating a map object
- var map = new L.map('map', mapOptions);
-
- // Creating a Layer object
- var layer = new L.TileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png');
-
- // Adding layer to the map
- map.addLayer(layer);
 </script>
 {% endblock %}
