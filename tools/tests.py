@@ -1,7 +1,9 @@
 from django.test import TestCase, RequestFactory
+from django.http import HttpRequest
 from ipware import get_client_ip
 
 from .views import HomePage
+from . import forms
 
 
 class HomePageTest(TestCase):
@@ -18,3 +20,32 @@ class HomePageTest(TestCase):
 
         self.assertIn('ipaddress', context)
         self.assertEqual(client_ip, context.get('ipaddress'))
+
+    def test_template(self):
+        request = self.client.get('/')
+        self.assertTemplateUsed(request, 'main.html')
+
+
+class TestDomainForm(TestCase):
+
+    def test_form_valid(self):
+        form = forms.DomainForm(data={'domain': 'example.com'})
+        self.assertTrue(form.is_valid())
+
+    def test_form_invalid(self):
+        self.assertFalse(forms.DomainForm({'domain': 'localhost'}).is_valid())
+        self.assertFalse(forms.DomainForm({'domain': '123'}).is_valid())
+        self.assertFalse(forms.DomainForm({'domain': 'https://example.com'}).is_valid())
+        self.assertFalse(forms.DomainForm({'domain': 'http://localhost'}).is_valid())
+        self.assertFalse(forms.DomainForm({'domain': '127.0.0.1'}).is_valid())
+
+
+class TestIPForm(TestCase):
+
+    def test_form_valid(self):
+        form = forms.IPForm({'ipaddress': '10.0.0.1'})
+        self.assertTrue(form.is_valid())
+
+    def test_form_invalid(self):
+        self.assertFalse(forms.IPForm({'ipaddress': '127.0.0.256'}).is_valid())
+        self.assertFalse(forms.IPForm({'ipaddress': 'just a string'}).is_valid())
