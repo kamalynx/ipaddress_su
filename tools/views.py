@@ -14,6 +14,7 @@ from ipware import get_client_ip
 from markdown import markdown
 
 from . import forms, helpers
+from articles import models
 
 
 class HomePage(TemplateView):
@@ -24,6 +25,7 @@ class HomePage(TemplateView):
 
         client_ip = get_client_ip(self.request)[0]
         kwargs['ipaddress'] = client_ip
+        kwargs['articles'] = models.Article.objects.all()[::5]
 
         return super(HomePage, self).get_context_data(**kwargs)
 
