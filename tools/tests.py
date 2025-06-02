@@ -1,8 +1,6 @@
-import ipaddress
 from datetime import datetime
 
 from django.test import TestCase, RequestFactory
-from django.http import HttpRequest
 from ipware import get_client_ip
 
 from .views import HomePage

@@ -1,19 +1,13 @@
 import asyncio
-import ipaddress
 
 import httpx
 import validators
 import whois
 from django.shortcuts import render, redirect
-from django.urls import reverse_lazy
 from django.http import Http404
-from django.core.validators import validate_ipv46_address
-from django.core.exceptions import ValidationError
-from django.views.generic import TemplateView, FormView
+from django.views.generic import TemplateView
 from ipware import get_client_ip
-from markdown import markdown
-
-from . import forms, helpers
+from tools import forms, helpers
 
 
 class HomePage(TemplateView):
@@ -94,9 +88,6 @@ def ipinfo_view(request, ip: str = None):
     if ip is not None:
         form = forms.IPForm({'ipaddress': ip})
 
-        # ~ if not validators.domain(domain):
-            # ~ raise Http404("Домен некорректен")
-
         params = {
             'lang': 'ru',
             'fields': ','.join((
@@ -127,16 +118,3 @@ def ipinfo_view(request, ip: str = None):
     context['form'] = form
     context['ip'] = ip
     return render(request, "tools/ipinfo.html", context=context)
-
-
-class WhoisView(FormView):
-    template_name = 'tools/whois.html'
-    form_class = forms.DomainForm
-
-    def form_valid(self, form):
-        domain = form.cleaned_data['domain']
-        print(domain)
-        return super().form_valid(form)
-
-    def get_success_url(self):
-        return reverse_lazy('tools:whois')
