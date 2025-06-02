@@ -1,9 +1,12 @@
+import ipaddress
+from datetime import datetime
+
 from django.test import TestCase, RequestFactory
 from django.http import HttpRequest
 from ipware import get_client_ip
 
 from .views import HomePage
-from . import forms
+from . import forms, models
 
 
 class HomePageTest(TestCase):
@@ -49,3 +52,12 @@ class TestIPForm(TestCase):
     def test_form_invalid(self):
         self.assertFalse(forms.IPForm({'ipaddress': '127.0.0.256'}).is_valid())
         self.assertFalse(forms.IPForm({'ipaddress': 'just a string'}).is_valid())
+
+
+class TestIPLog(TestCase):
+
+    def test_ipv4(self):
+        entry = models.IPLog.objects.create(address='1.1.1.1')
+        self.assertEqual(entry.address, '1.1.1.1')
+        self.assertIsInstance(entry.created_at, datetime)
+        self.assertIsInstance(entry.address, str)

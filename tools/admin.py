@@ -1,3 +1,8 @@
 from django.contrib import admin
 
-# Register your models here.
+from tools import models
+
+
+@admin.register(models.IPLog)
+class IPLogAdmin(admin.ModelAdmin):
+    pass
