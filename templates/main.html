@@ -9,17 +9,15 @@
 
 {% block body %}
 
-<div class="block">
-  <section class="block block--white block--ip">
-    <div>
-      <p>Ваш IP адрес:</p>
-      <p class="ipaddress">{{ ipaddress }}</p>
-    </div>
-    <div>
-      <p>Ваш IPv6 адрес:</p>
-      <p id="IPv6" class="ipaddress">вычисляем...</p>
-    </div>
-  </section>
+<div class="block block--white block--ip">
+  <div>
+    <p>Ваш IP адрес:</p>
+    <p class="ipaddress">{{ ipaddress }}</p>
+  </div>
+  <div>
+    <p>Ваш IPv6 адрес:</p>
+    <p id="IPv6" class="ipaddress">вычисляем...</p>
+  </div>
 </div>
 {% endblock %}
 

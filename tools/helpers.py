@@ -5,11 +5,31 @@ from collections.abc import Iterable
 
 import dns.asyncresolver
 import dns.resolver
+import httpx
+from attrs import define
 from playwright.async_api import async_playwright
 
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
+
+
+@define
+class IPInfo:
+    status: str
+    country: str
+    countryCode: str
+    regionName: str
+    city: str
+    lat: float
+    lon: float
+    timezone: str
+    isp: str
+    org: str
+    reverse: str
+    mobile: bool
+    proxy: bool
+    query: str
 
 
 def do_nslookup(domain):
@@ -61,6 +81,35 @@ async def take_screenshot(url: str) -> bytes:
         return BytesIO(scr)
 
 
+def get_ip_info(ipaddress: str):
+    params = {
+        'lang': 'ru',
+        'fields': ','.join((
+            'status',
+            'message',
+            'country',
+            'countryCode',
+            'regionName',
+            'city',
+            'lat',
+            'lon',
+            'timezone',
+            'isp',
+            'org',
+            'reverse',
+            'mobile',
+            'proxy',
+            'query',
+        )),
+    }
+
+    with httpx.Client() as client:
+        result = client.get(f'http://ip-api.com/json/{ipaddress}', params=params)
+
+    return IPInfo(**result.json())
+
+
 if __name__ == '__main__':
     # ~ asyncio.run(get_dns_records('kamafish.ru'))
-    print(asyncio.run(take_screenshot('https://ipaddress.su')))
+    # ~ print(asyncio.run(take_screenshot('https://ipaddress.su')))
+    print(get_ip_info('212.33.245.31'))

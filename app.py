@@ -25,7 +25,7 @@ app = Starlette(
         Route('/screen/{url:path}', get_screenshot),
     ),
     middleware=(
-        Middleware(CORSMiddleware, allow_origins=('https://ipaddress.su',)),
+        Middleware(CORSMiddleware, allow_origins=('https://ipaddress.su', 'http://127.0.0.1:8000')),
     ),
 )
 
