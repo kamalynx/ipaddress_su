@@ -6,8 +6,10 @@ import whois
 from django.shortcuts import render, redirect
 from django.http import Http404
 from django.views.generic import TemplateView
+from django.utils import timezone
 from ipware import get_client_ip
-from tools import forms, helpers
+
+from tools import forms, helpers, models
 
 
 class HomePage(TemplateView):
@@ -44,7 +46,13 @@ def nslookup(request, domain: str = None):
         context["domain"] = domain
         context["ipsv4"] = result[0]
         context["ipsv6"] = result[1]
+
+        domain_model, created = models.DomainLog.objects.get_or_create(name=domain, view_type='nslookup')
+        domain_model.timestamp = timezone.now()
+        domain_model.save()
+
     context['form'] = form
+    context['log'] = models.DomainLog.objects.filter(view_type='nslookup').all()[:10]
     return render(request, "tools/checkip.html", context=context)
 
 
@@ -69,7 +77,12 @@ def whois_view(request, domain: str = None):
         result = whois.whois(domain)
         context['result'] = result
 
+        domain_model, created = models.DomainLog.objects.get_or_create(name=domain, view_type='whois')
+        domain_model.timestamp = timezone.now()
+        domain_model.save()
+
     context['form'] = form
+    context['log'] = models.DomainLog.objects.filter(view_type='whois').all()[:10]
     return render(request, "tools/whois.html", context=context)
 
 
@@ -115,6 +128,11 @@ def ipinfo_view(request, ip: str = None):
 
         context['result'] = result.json()
 
+        ip_model, created = models.IPLog.objects.get_or_create(address=ip)
+        ip_model.timestamp = timezone.now()
+        ip_model.save()
+
     context['form'] = form
     context['ip'] = ip
+    context['log'] = models.IPLog.objects.all()[:10]
     return render(request, "tools/ipinfo.html", context=context)

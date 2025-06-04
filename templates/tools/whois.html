@@ -31,6 +31,17 @@
     {% if result %}
     <pre><code>{{ result.text }}</code></pre>
     {% endif %}
+  <section>
+    <h2>Журнал доменов</h2>
+    <table class="table">
+      {% for domain in log %}
+      <tr>
+        <td><a href="{% url 'tools:whois_with_domain' domain.name %}">{{ domain.name }}</a></td>
+        <td>{{ domain.timestamp|date:'d.m.Y H:i:s' }}</td>
+      </tr>
+      {% endfor %}
+    </table>
+  </section>
 </section>
 
 {% endblock %}

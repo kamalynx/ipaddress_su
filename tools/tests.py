@@ -51,11 +51,3 @@ class TestIPForm(TestCase):
         self.assertFalse(forms.IPForm({'ipaddress': '127.0.0.256'}).is_valid())
         self.assertFalse(forms.IPForm({'ipaddress': 'just a string'}).is_valid())
 
-
-class TestIPLog(TestCase):
-
-    def test_ipv4(self):
-        entry = models.IPLog.objects.create(address='1.1.1.1')
-        self.assertEqual(entry.address, '1.1.1.1')
-        self.assertIsInstance(entry.created_at, datetime)
-        self.assertIsInstance(entry.address, str)

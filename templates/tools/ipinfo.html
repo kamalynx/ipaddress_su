@@ -91,6 +91,18 @@
       <div id="map" style="width:800px; height:600px;"></div>
     {% endif %}
   {% endif %}
+
+  <section>
+    <h2>Журнал IP</h2>
+    <table class="table">
+    {% for ip in log %}
+      <tr>
+        <td><a href="{% url 'tools:ipinfo_with_ip' ip.address %}">{{ ip.address }}</a></td>
+        <td>{{ ip.timestamp|date:'d.m.Y H:i:s' }}</td>
+      </tr>
+    {% endfor %}
+    </table>
+  </section>
 </section>
 
 {% endblock %}
