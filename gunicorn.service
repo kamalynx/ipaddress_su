@@ -1,26 +1,16 @@
 [Unit]
-Description=gunicorn
-Requires=gunicorn.socket
+Description=gunicorn daemon for ipaddress.su
 After=network.target
 
 [Service]
-# gunicorn can let systemd know when it is ready
-Type=notify
-NotifyAccess=main
-# the specific user that our service will run as
 User=web
-Group=web
-# this user can be transiently created by systemd
-# DynamicUser=true
-RuntimeDirectory=/run/gunicorn
+Group=www-data
 WorkingDirectory=/home/web/ipaddress_su
-ExecStart=/home/web/.local/bin/uv run gunicorn
+ExecStart=/home/web/.local/bin/uv gunicorn
 ExecReload=/bin/kill -s HUP $MAINPID
 KillMode=mixed
 TimeoutStopSec=5
 PrivateTmp=true
-# if your app does not need administrative capabilities, let systemd know
-# ProtectSystem=strict
 
 [Install]
 WantedBy=multi-user.target
