@@ -2,6 +2,7 @@ import asyncio
 
 import httpx
 import validators
+import netaddr
 import whois
 from django.shortcuts import render, redirect
 from django.http import Http404
@@ -10,16 +11,17 @@ from django.utils import timezone
 from ipware import get_client_ip
 
 from tools import forms, helpers, models
+from tools.ipv4 import calculate_subnet
 
 
 class HomePage(TemplateView):
-    template_name = 'main.html'
+    template_name = "main.html"
 
     def get_context_data(self, **kwargs):
         """Add client ip to context data."""
 
         client_ip = get_client_ip(self.request)[0]
-        kwargs['ipaddress'] = client_ip
+        kwargs["ipaddress"] = client_ip
 
         return super(HomePage, self).get_context_data(**kwargs)
 
@@ -37,7 +39,7 @@ def nslookup(request, domain: str = None):
         form = forms.DomainForm()
 
     if domain is not None:
-        form = forms.DomainForm({'domain': domain})
+        form = forms.DomainForm({"domain": domain})
 
         if not validators.domain(domain):
             raise Http404("Домен некорректен")
@@ -47,12 +49,16 @@ def nslookup(request, domain: str = None):
         context["ipsv4"] = result[0]
         context["ipsv6"] = result[1]
 
-        domain_model, created = models.DomainLog.objects.get_or_create(name=domain, view_type='nslookup')
+        domain_model, created = models.DomainLog.objects.get_or_create(
+            name=domain, view_type="nslookup"
+        )
         domain_model.timestamp = timezone.now()
         domain_model.save()
 
-    context['form'] = form
-    context['log'] = models.DomainLog.objects.filter(view_type='nslookup').all()[:10]
+    context["form"] = form
+    context["log"] = models.DomainLog.objects.filter(
+        view_type="nslookup"
+    ).all()[:10]
     return render(request, "tools/checkip.html", context=context)
 
 
@@ -69,20 +75,24 @@ def whois_view(request, domain: str = None):
         form = forms.DomainForm()
 
     if domain is not None:
-        form = forms.DomainForm({'domain': domain})
+        form = forms.DomainForm({"domain": domain})
 
         if not validators.domain(domain):
             raise Http404("Домен некорректен")
 
         result = whois.whois(domain)
-        context['result'] = result
+        context["result"] = result
 
-        domain_model, created = models.DomainLog.objects.get_or_create(name=domain, view_type='whois')
+        domain_model, created = models.DomainLog.objects.get_or_create(
+            name=domain, view_type="whois"
+        )
         domain_model.timestamp = timezone.now()
         domain_model.save()
 
-    context['form'] = form
-    context['log'] = models.DomainLog.objects.filter(view_type='whois').all()[:10]
+    context["form"] = form
+    context["log"] = models.DomainLog.objects.filter(view_type="whois").all()[
+        :10
+    ]
     return render(request, "tools/whois.html", context=context)
 
 
@@ -99,40 +109,62 @@ def ipinfo_view(request, ip: str = None):
         form = forms.IPForm()
 
     if ip is not None:
-        form = forms.IPForm({'ipaddress': ip})
+        form = forms.IPForm({"ipaddress": ip})
 
         params = {
-            'lang': 'ru',
-            'fields': ','.join((
-                'status',
-                'message',
-                'country',
-                'countryCode',
-                'regionName',
-                'city',
-                'lat',
-                'lon',
-                'timezone',
-                'isp',
-                'org',
-                'as',
-                'reverse',
-                'mobile',
-                'proxy',
-                'query',
-            )),
+            "lang": "ru",
+            "fields": ",".join(
+                (
+                    "status",
+                    "message",
+                    "country",
+                    "countryCode",
+                    "regionName",
+                    "city",
+                    "lat",
+                    "lon",
+                    "timezone",
+                    "isp",
+                    "org",
+                    "as",
+                    "reverse",
+                    "mobile",
+                    "proxy",
+                    "query",
+                )
+            ),
         }
 
         with httpx.Client() as client:
-            result = client.get(f'http://ip-api.com/json/{ip}', params=params)
+            result = client.get(f"http://ip-api.com/json/{ip}", params=params)
 
-        context['result'] = result.json()
+        context["result"] = result.json()
 
         ip_model, created = models.IPLog.objects.get_or_create(address=ip)
         ip_model.timestamp = timezone.now()
         ip_model.save()
 
-    context['form'] = form
-    context['ip'] = ip
-    context['log'] = models.IPLog.objects.all()[:10]
+    context["form"] = form
+    context["ip"] = ip
+    context["log"] = models.IPLog.objects.all()[:10]
     return render(request, "tools/ipinfo.html", context=context)
+
+
+def ipcalc_view(request):
+    context = {}
+
+    if request.method == "POST":
+
+        form = forms.IPv4CalcForm(request.POST)
+
+        if form.is_valid():
+            ipaddress = form.cleaned_data["ipaddress"]
+            cidr = form.cleaned_data["netmask"]
+            context["result"] = netaddr.IPNetwork(f"{ipaddress}/{cidr}")
+    else:
+        form = forms.IPv4CalcForm()
+
+    context["form"] = form
+
+    print(dir(context["result"]))
+    return render(request, "tools/ipcalc.html", context=context)

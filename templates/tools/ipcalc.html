@@ -1,0 +1,52 @@
+{% extends 'base.html' %}
+{% load tools_extras %}
+
+{% block title %}IP калькулятор{% endblock %}
+
+{% block head %}
+<meta name="description" content="">
+{% endblock %}
+
+
+{% block body %}
+
+<section class="block block--white">
+  <h1>Калькулятор IP подсетей</h1>
+  <form class="form" method="post" novalidate>
+    {% csrf_token %}
+
+    {{ form.ipaddress.label_tag }}
+
+    <div class="form__group">
+      {{ form.ipaddress }}
+    </div>
+
+    {% if form.ipaddress.errors %}
+      {% for error in form.ipaddress.errors %}
+        <p class="form__error">{{ error }}</p>
+      {% endfor %}
+    {% endif %}
+
+    {{ form.netmask.label_tag }}
+
+    <div class="form__group">
+      {{ form.netmask }}
+    </div>
+
+    {% if form.netmask.errors %}
+      {% for error in form.netmask.errors %}
+        <p class="form__error">{{ error }}</p>
+      {% endfor %}
+    {% endif %}
+
+    <button class="button" name="submit">Calc!</button>
+  </form>
+
+  {{ result.broadcast }}
+
+  <br>{{ result.netmask }}
+  <br>{{ result.network }}
+
+</section>
+
+{% endblock %}

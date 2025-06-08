@@ -13,7 +13,8 @@ class Migration(migrations.Migration):
         migrations.AddIndex(
             model_name="domainlog",
             index=models.Index(
-                fields=["name", "view_type"], name="tools_domai_name_4a2534_idx"
+                fields=["name", "view_type"],
+                name="tools_domai_name_4a2534_idx",
             ),
         ),
         migrations.AddIndex(

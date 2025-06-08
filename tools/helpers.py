@@ -60,10 +60,12 @@ async def a_do_nslookup(domain):
 
 
 async def get_dns_records(domain):
-    common_records = ('a', 'aaaa', 'mx', 'txt', 'ns', 'soa')
+    common_records = ("a", "aaaa", "mx", "txt", "ns", "soa")
 
     tasks = [
-        asyncio.create_task(dns.asyncresolver.resolve(domain, record_type.capitalize()))
+        asyncio.create_task(
+            dns.asyncresolver.resolve(domain, record_type.capitalize())
+        )
         for record_type in common_records
     ]
 
@@ -77,39 +79,43 @@ async def take_screenshot(url: str) -> bytes:
         browser = await pw.firefox.launch()
         page = await browser.new_page()
         await page.goto(url)
-        scr = await page.screenshot(scale='css')
+        scr = await page.screenshot(scale="css")
         return BytesIO(scr)
 
 
 def get_ip_info(ipaddress: str):
     params = {
-        'lang': 'ru',
-        'fields': ','.join((
-            'status',
-            'message',
-            'country',
-            'countryCode',
-            'regionName',
-            'city',
-            'lat',
-            'lon',
-            'timezone',
-            'isp',
-            'org',
-            'reverse',
-            'mobile',
-            'proxy',
-            'query',
-        )),
+        "lang": "ru",
+        "fields": ",".join(
+            (
+                "status",
+                "message",
+                "country",
+                "countryCode",
+                "regionName",
+                "city",
+                "lat",
+                "lon",
+                "timezone",
+                "isp",
+                "org",
+                "reverse",
+                "mobile",
+                "proxy",
+                "query",
+            )
+        ),
     }
 
     with httpx.Client() as client:
-        result = client.get(f'http://ip-api.com/json/{ipaddress}', params=params)
+        result = client.get(
+            f"http://ip-api.com/json/{ipaddress}", params=params
+        )
 
     return IPInfo(**result.json())
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     # ~ asyncio.run(get_dns_records('kamafish.ru'))
     # ~ print(asyncio.run(take_screenshot('https://ipaddress.su')))
-    print(get_ip_info('212.33.245.31'))
+    print(get_ip_info("212.33.245.31"))

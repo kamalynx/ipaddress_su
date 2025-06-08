@@ -24,7 +24,10 @@ class Migration(migrations.Migration):
                     ),
                 ),
                 ("timestamp", models.DateTimeField(auto_now=True)),
-                ("domain", models.CharField(max_length=255, verbose_name="домен")),
+                (
+                    "domain",
+                    models.CharField(max_length=255, verbose_name="домен"),
+                ),
             ],
             options={
                 "verbose_name": "Журнал доменов",
