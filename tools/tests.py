@@ -1,7 +1,10 @@
 from datetime import datetime
 
+import pytest
+from netaddr import valid_ipv4, valid_ipv6
 from django.test import TestCase, RequestFactory
 from ipware import get_client_ip
+from playwright.sync_api import Page, expect
 
 from .views import HomePage
 from . import forms, models
@@ -51,3 +54,14 @@ class TestIPForm(TestCase):
         self.assertFalse(forms.IPForm({'ipaddress': '127.0.0.256'}).is_valid())
         self.assertFalse(forms.IPForm({'ipaddress': 'just a string'}).is_valid())
 
+
+@pytest.fixture
+def iplog_model():
+    return models.IPLog.objects.create(address='127.0.0.1')
+
+
+@pytest.mark.django_db
+def test_sample_model_ip(iplog_model):
+    assert iplog_model.address == '127.0.0.1'
+    assert isinstance(iplog_model.address, str)
+    assert valid_ipv4(iplog_model.address)

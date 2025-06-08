@@ -13,7 +13,7 @@ class SubnetInfo:
 def calculate_subnet(ip_address: str, subnet_mask: str) -> SubnetInfo:
     # Создаем объект сети
     network = IPv4Network(f"{ip_address}/{subnet_mask}", strict=False)
-    
+
     # Возвращаем информацию о подсети в виде dataclass
     return SubnetInfo(
         network_address=str(network.network_address),

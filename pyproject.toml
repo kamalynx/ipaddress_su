@@ -18,9 +18,18 @@ dependencies = [
     "pillow>=11.1.0",
     "playwright>=1.52.0",
     "psycopg>=3.2.9",
+    "pytest-django>=4.11.1",
+    "pytest-playwright>=0.7.0",
+    "python-dotenv>=1.1.0",
     "python-whois>=0.9.5",
     "starlette>=0.45.3",
     "uuid6>=2024.7.10",
     "uvicorn>=0.34.0",
     "validators>=0.34.0",
 ]
+
+# -- Example FILE: pyproject.toml
+[tool.pytest.ini_options]
+DJANGO_SETTINGS_MODULE = "core.settings"
+# -- recommended but optional:
+python_files = ["test_*.py", "*_test.py", "testing/python/*.py", "*/tests*.py"]

@@ -1,31 +1,28 @@
 import uvicorn
+from dotenv import dotenv_values
 from starlette.applications import Starlette
 from starlette.routing import Route
 from starlette.requests import Request
-from starlette.responses import PlainTextResponse, StreamingResponse
+from starlette.responses import PlainTextResponse
 from starlette.middleware import Middleware
 from starlette.middleware.cors import CORSMiddleware
 
-from tools.helpers import take_screenshot
+
+cfg = dotenv_values('.env')
 
 
 async def get_ip(request: Request) -> PlainTextResponse:
     return PlainTextResponse(request.client.host)
 
 
-async def get_screenshot(request: Request) -> StreamingResponse:
-    url = request.path_params['url']
-    screen = await take_screenshot(f'https://{url}')
-    return StreamingResponse(screen)
-
-
 app = Starlette(
     routes=(
         Route('/', get_ip),
-        Route('/screen/{url:path}', get_screenshot),
     ),
     middleware=(
-        Middleware(CORSMiddleware, allow_origins=('https://ipaddress.su', 'http://127.0.0.1:8000')),
+        Middleware(
+            CORSMiddleware, allow_origins=cfg.get('CORS_ALLOWED_HOSTS', 'http://127.0.0.1:8000').split(',')
+        ),
     ),
 )
 
