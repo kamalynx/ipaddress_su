@@ -1,5 +1,6 @@
 from ipaddress import IPv4Network, IPv4Address
 from dataclasses import dataclass
+from netaddr import IPNetwork, IPAddress
 
 
 @dataclass
@@ -28,10 +29,26 @@ def calculate_subnet(ipaddress: str, netmask: str) -> SubnetInfo:
     )
 
 
+def get_subnet(ipaddress: str, netmask: int):
+    net = IPNetwork(f'{ipaddress}/{netmask}')
+    print(dir(net))
+    return {
+        'broadcast': net.broadcast,
+        'cidr': net.cidr,
+        'first': IPAddress(net.first),
+        'last': IPAddress(net.last),
+        'hostmask': net.hostmask,
+        'address': net.ip,
+        'network': net.network,
+        'size': net.size,
+    }
+
+
 if __name__ == "__main__":
     # Пример использования
-    ip = "192.168.1.0"
-    subnet_mask = "255.255.255.0"
-    subnet_info = calculate_subnet(ip, subnet_mask)
+    # ~ ip = "192.168.1.0"
+    # ~ subnet_mask = "255.255.255.0"
+    # ~ subnet_info = calculate_subnet(ip, subnet_mask)
 
-    print(subnet_info)
+    # ~ print(subnet_info)
+    print(get_subnet('212.33.245.31', 24))
