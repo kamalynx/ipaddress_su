@@ -92,6 +92,7 @@
     {% endif %}
   {% endif %}
 
+  {% if log %}
   <section>
     <h2>Журнал IP</h2>
     <table class="table">
@@ -103,6 +104,7 @@
     {% endfor %}
     </table>
   </section>
+  {% endif %}
 </section>
 
 {% endblock %}
@@ -118,7 +120,6 @@
   const marker = L.marker([latitude, longitude]).addTo(map);
   map.attributionControl.setPrefix(false);
   L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
-      //~ maxZoom: 19,
       attribution: ''
   }).addTo(map);
 </script>

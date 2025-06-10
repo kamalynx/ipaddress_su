@@ -10,8 +10,8 @@ urlpatterns = [
     path(
         "", TemplateView.as_view(template_name="tools/tools.html"), name="main"
     ),
-    path("nslookup/", views.nslookup, name="nslookup"),
-    path("nslookup/<domain>/", views.nslookup, name="nslookup_with_domain"),
+    path("nslookup/", views.nslookup_view, name="nslookup"),
+    path("nslookup/<domain>/", views.nslookup_view, name="nslookup_with_domain"),
     path("ipinfo/", views.ipinfo_view, name="ipinfo"),
     path("ipinfo/<ip>/", views.ipinfo_view, name="ipinfo_with_ip"),
     path("ipcalc/", views.ipcalc_view, name="ipcalc"),

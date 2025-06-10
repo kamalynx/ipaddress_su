@@ -30,7 +30,7 @@
   </form>
 
   {% if ipsv4 and ipsv4 %}
-    <section class="block block--white">
+    <section class="">
       <h2>IP адреса домена {{ domain }}:</h2>
       <p><strong>IPv4</strong></p>
       {% if ipsv4|is_iterable %}
@@ -56,6 +56,7 @@
     </section>
   {% endif %}
 
+  {% if log %}
   <section>
     <h2>Журнал доменов</h2>
     <table class="table">
@@ -67,6 +68,7 @@
       {% endfor %}
     </table>
   </section>
+  {% endif %}
 </section>
 
 {% endblock %}

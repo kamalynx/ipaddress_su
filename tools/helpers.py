@@ -1,13 +1,10 @@
-import asyncio
 import logging
 from io import BytesIO
-from collections.abc import Iterable
+from time import monotonic
 
-import dns.asyncresolver
 import dns.resolver
 import httpx
 from attrs import define
-from playwright.async_api import async_playwright
 
 
 logger = logging.getLogger(__name__)
@@ -30,33 +27,30 @@ class IPInfo:
     mobile: bool
     proxy: bool
     query: str
+    asn: str
 
 
-def do_nslookup(domain):
-    ipsv4 = None
-    ipsv6 = None
+@define
+class IPError:
+    status: str
+    message: str
+    query: str
+
+
+def nslookup(domain):
+    ipsv4, ipsv6 = None, None
 
     try:
         ipsv4 = dns.resolver.resolve(domain, "a")
+    except dns.resolver.NoAnswer as err:
+        ipsv4 = err
+
+    try:
         ipsv6 = dns.resolver.resolve(domain, "aaaa")
     except dns.resolver.NoAnswer as err:
-        logger.error(err)
+        ipsv6 = err
 
     return ipsv4, ipsv6
-
-
-async def a_do_nslookup(domain):
-    tasks = [
-        asyncio.create_task(dns.asyncresolver.resolve(domain, "a")),
-        asyncio.create_task(dns.asyncresolver.resolve(domain, "aaaa")),
-    ]
-
-    result = await asyncio.gather(*tasks, return_exceptions=True)
-
-    for i in result:
-        print(isinstance(i, Iterable))
-
-    return result
 
 
 async def get_dns_records(domain):
@@ -74,16 +68,7 @@ async def get_dns_records(domain):
     print([x for x in result])
 
 
-async def take_screenshot(url: str) -> bytes:
-    async with async_playwright() as pw:
-        browser = await pw.firefox.launch()
-        page = await browser.new_page()
-        await page.goto(url)
-        scr = await page.screenshot(scale="css")
-        return BytesIO(scr)
-
-
-def get_ip_info(ipaddress: str):
+def get_ip_info(ipaddress: str) -> IPInfo | IPError:
     params = {
         "lang": "ru",
         "fields": ",".join(
@@ -103,19 +88,24 @@ def get_ip_info(ipaddress: str):
                 "mobile",
                 "proxy",
                 "query",
+                "as",
             )
         ),
     }
 
     with httpx.Client() as client:
-        result = client.get(
+        ipinfo = client.get(
             f"http://ip-api.com/json/{ipaddress}", params=params
-        )
+        ).json()
 
-    return IPInfo(**result.json())
+    match ipinfo['status']:
+        case 'success':
+            ipinfo['asn'] = ipinfo['as']  # "as" can't be variable name
+            ipinfo.pop('as')  # so remove it
+            return IPInfo(**ipinfo)
+        case 'fail':
+            return IPError(**ipinfo)
 
 
 if __name__ == "__main__":
-    # ~ asyncio.run(get_dns_records('kamafish.ru'))
-    # ~ print(asyncio.run(take_screenshot('https://ipaddress.su')))
-    print(get_ip_info("212.33.245.31"))
+    print(nslookup('ya.ru')[0])

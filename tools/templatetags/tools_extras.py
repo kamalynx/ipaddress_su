@@ -8,4 +8,4 @@ register = template.Library()
 
 @register.filter
 def is_iterable(data):
-    return isinstance(data, Iterable)
+    return isinstance(data, Iterable) and not isinstance(data, str)

@@ -25,7 +25,7 @@ class HomePage(TemplateView):
         return super(HomePage, self).get_context_data(**kwargs)
 
 
-def nslookup(request, domain: str = None):
+def nslookup_view(request, domain: str = None):
     context = {}
 
     if request.method == "POST":
@@ -43,7 +43,7 @@ def nslookup(request, domain: str = None):
         if not validators.domain(domain):
             raise Http404("Домен некорректен")
 
-        result = asyncio.run(helpers.a_do_nslookup(domain))
+        result = helpers.nslookup(domain)
         context["domain"] = domain
         context["ipsv4"] = result[0]
         context["ipsv6"] = result[1]
@@ -75,35 +75,7 @@ def ipinfo_view(request, ip: str = None):
 
     if ip is not None:
         form = forms.IPForm({"ipaddress": ip})
-
-        params = {
-            "lang": "ru",
-            "fields": ",".join(
-                (
-                    "status",
-                    "message",
-                    "country",
-                    "countryCode",
-                    "regionName",
-                    "city",
-                    "lat",
-                    "lon",
-                    "timezone",
-                    "isp",
-                    "org",
-                    "as",
-                    "reverse",
-                    "mobile",
-                    "proxy",
-                    "query",
-                )
-            ),
-        }
-
-        with httpx.Client() as client:
-            result = client.get(f"http://ip-api.com/json/{ip}", params=params)
-
-        context["result"] = result.json()
+        context["result"] = helpers.get_ip_info(ip)
 
         ip_model, created = models.IPLog.objects.get_or_create(address=ip)
         ip_model.timestamp = timezone.now()
@@ -131,5 +103,4 @@ def ipcalc_view(request):
 
     context["form"] = form
 
-    print(dir(context["result"]))
     return render(request, "tools/ipcalc.html", context=context)
