@@ -52,7 +52,6 @@ class IPForm(forms.Form):
         label="IP адрес",
         widget=forms.TextInput(attrs={"class": "form__field"}),
         unpack_ipv4=True,
-        validators=[validate_ipv46_address],
     )
 
 

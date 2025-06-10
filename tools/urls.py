@@ -13,6 +13,6 @@ urlpatterns = [
     path("nslookup/", views.nslookup_view, name="nslookup"),
     path("nslookup/<domain>/", views.nslookup_view, name="nslookup_with_domain"),
     path("ipinfo/", views.ipinfo_view, name="ipinfo"),
-    path("ipinfo/<ip>/", views.ipinfo_view, name="ipinfo_with_ip"),
+    path("ipinfo/<ip>/", views.ipinfo_with_ip, name="ipinfo_with_ip"),
     path("ipcalc/", views.ipcalc_view, name="ipcalc"),
 ]

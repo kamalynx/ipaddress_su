@@ -4,6 +4,7 @@ from time import monotonic
 
 import dns.resolver
 import httpx
+from dns.exception import DNSException
 from attrs import define
 
 
@@ -42,12 +43,12 @@ def nslookup(domain):
 
     try:
         ipsv4 = dns.resolver.resolve(domain, "a")
-    except dns.resolver.NoAnswer as err:
+    except DNSException as err:
         ipsv4 = err
 
     try:
         ipsv6 = dns.resolver.resolve(domain, "aaaa")
-    except dns.resolver.NoAnswer as err:
+    except DNSException as err:
         ipsv6 = err
 
     return ipsv4, ipsv6

@@ -61,29 +61,44 @@ def nslookup_view(request, domain: str = None):
     return render(request, "tools/checkip.html", context=context)
 
 
-def ipinfo_view(request, ip: str = None):
-    context = {}
+def ipinfo_view(request):
+    if request.method == "POST":
+        form = forms.IPForm(request.POST)
+
+        if form.is_valid():
+            ip = form.cleaned_data.get("ipaddress")
+
+            if ip == '127.0.0.1':
+                ip = get_client_ip(request)[0]  # works only on prod :)
+
+            return redirect("tools:ipinfo_with_ip", str(ip))
+    else:
+        form = forms.IPForm()
+
+    context = {"form": form, "log": models.IPLog.objects.all()[:10]}
+    return render(request, "tools/ipinfo.html", context=context)
+
+
+def ipinfo_with_ip(request, ip: str = None):
 
     if request.method == "POST":
         form = forms.IPForm(request.POST)
 
         if form.is_valid():
             ip = form.cleaned_data.get("ipaddress")
-            return redirect("tools:ipinfo_with_ip", str(ip))
     else:
-        form = forms.IPForm()
-
-    if ip is not None:
         form = forms.IPForm({"ipaddress": ip})
-        context["result"] = helpers.get_ip_info(ip)
 
-        ip_model, created = models.IPLog.objects.get_or_create(address=ip)
-        ip_model.timestamp = timezone.now()
-        ip_model.save()
+    ip_model, created = models.IPLog.objects.get_or_create(address=ip)
+    ip_model.timestamp = timezone.now()
+    ip_model.save()
 
-    context["form"] = form
-    context["ip"] = ip
-    context["log"] = models.IPLog.objects.all()[:10]
+    context = {
+        "result": helpers.get_ip_info(ip),
+        "form": form,
+        "ip": ip,
+        "log": models.IPLog.objects.all()[:10],
+    }
     return render(request, "tools/ipinfo.html", context=context)
 
 
