@@ -30,30 +30,27 @@
   </form>
 
   {% if ipsv4 and ipsv4 %}
-    <section class="">
-      <h2>IP адреса домена {{ domain }}:</h2>
-      <p><strong>IPv4</strong></p>
-      {% if ipsv4|is_iterable %}
-        <ul>
-        {% for ip in ipsv4 %}
-          <li><a href="{% url 'tools:ipinfo_with_ip' ip %}">{{ ip }}</a></li>
-        {% endfor %}
-        </ul>
-      {% else %}
-        <p>{{ ipsv4 }}</p>
-      {% endif %}
+    <p><strong>IPv4</strong></p>
+    {% if ipsv4|is_iterable %}
+      <ul>
+      {% for ip in ipsv4 %}
+        <li><a href="{% url 'tools:ipinfo_with_ip' ip %}">{{ ip }}</a></li>
+      {% endfor %}
+      </ul>
+    {% else %}
+      <p>{{ ipsv4 }}</p>
+    {% endif %}
 
-      <p><strong>IPv6</strong></p>
-      {% if ipsv6|is_iterable %}
-        <ul>
-        {% for ip in ipsv6 %}
-          <li><a href="{% url 'tools:ipinfo_with_ip' ip %}">{{ ip }}</a></li>
-        {% endfor %}
-        </ul>
-      {% else %}
-        <p>{{ ipsv6 }}</p>
-      {% endif %}
-    </section>
+    <p><strong>IPv6</strong></p>
+    {% if ipsv6|is_iterable %}
+      <ul>
+      {% for ip in ipsv6 %}
+        <li><a href="{% url 'tools:ipinfo_with_ip' ip %}">{{ ip }}</a></li>
+      {% endfor %}
+      </ul>
+    {% else %}
+      <p>{{ ipsv6 }}</p>
+    {% endif %}
   {% endif %}
 
   {% if log %}
