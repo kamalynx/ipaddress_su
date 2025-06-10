@@ -3,7 +3,6 @@ import asyncio
 import httpx
 import validators
 import netaddr
-import whois
 from django.shortcuts import render, redirect
 from django.http import Http404
 from django.views.generic import TemplateView
@@ -60,40 +59,6 @@ def nslookup(request, domain: str = None):
         view_type="nslookup"
     ).all()[:10]
     return render(request, "tools/checkip.html", context=context)
-
-
-def whois_view(request, domain: str = None):
-    context = {}
-
-    if request.method == "POST":
-        form = forms.DomainForm(request.POST)
-
-        if form.is_valid():
-            domain = form.cleaned_data.get("domain")
-            return redirect("tools:whois_with_domain", str(domain))
-    else:
-        form = forms.DomainForm()
-
-    if domain is not None:
-        form = forms.DomainForm({"domain": domain})
-
-        if not validators.domain(domain):
-            raise Http404("Домен некорректен")
-
-        result = whois.whois(domain)
-        context["result"] = result
-
-        domain_model, created = models.DomainLog.objects.get_or_create(
-            name=domain, view_type="whois"
-        )
-        domain_model.timestamp = timezone.now()
-        domain_model.save()
-
-    context["form"] = form
-    context["log"] = models.DomainLog.objects.filter(view_type="whois").all()[
-        :10
-    ]
-    return render(request, "tools/whois.html", context=context)
 
 
 def ipinfo_view(request, ip: str = None):

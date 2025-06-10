@@ -21,7 +21,6 @@ dependencies = [
     "pytest-django>=4.11.1",
     "pytest-playwright>=0.7.0",
     "python-dotenv>=1.1.0",
-    "python-whois>=0.9.5",
     "starlette>=0.45.3",
     "uuid6>=2024.7.10",
     "uvicorn>=0.34.0",
