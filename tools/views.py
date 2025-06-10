@@ -66,9 +66,13 @@ def ipinfo_view(request):
         form = forms.IPForm(request.POST)
 
         if form.is_valid():
-            ip = form.cleaned_data.get("ipaddress")
+            ip = netaddr.IPAddress(form.cleaned_data.get("ipaddress"))
 
-            if ip == '127.0.0.1':
+            if any([
+                ip.is_ipv4_private_use(),
+                ip.is_reserved(),
+                ip.is_loopback(),
+            ]):
                 ip = get_client_ip(request)[0]  # works only on prod :)
 
             return redirect("tools:ipinfo_with_ip", str(ip))
