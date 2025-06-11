@@ -1,7 +1,5 @@
-from datetime import datetime
-
 import pytest
-from netaddr import valid_ipv4, valid_ipv6
+from netaddr import valid_ipv4
 from django.test import TestCase, RequestFactory
 from ipware import get_client_ip
 

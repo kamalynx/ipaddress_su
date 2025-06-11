@@ -1,5 +1,3 @@
-import pytest
-from django.core.exceptions import ValidationError
 from netaddr import valid_ipv4
 
 from tools import forms

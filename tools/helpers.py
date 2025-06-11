@@ -1,6 +1,5 @@
+import asyncio
 import logging
-from io import BytesIO
-from time import monotonic
 
 import dns.resolver
 import httpx

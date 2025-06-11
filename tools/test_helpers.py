@@ -1,6 +1,4 @@
-from collections.abc import Iterable
 
-import pytest
 from netaddr import valid_ipv4, valid_ipv6
 
 from tools import helpers

@@ -1,5 +1,5 @@
 from django import forms
-from django.core.validators import DomainNameValidator, validate_ipv46_address
+from django.core.validators import DomainNameValidator
 
 
 subnet_masks = [

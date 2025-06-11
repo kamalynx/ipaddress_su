@@ -1,6 +1,3 @@
-import asyncio
-
-import httpx
 import validators
 import netaddr
 from django.shortcuts import render, redirect
@@ -10,7 +7,6 @@ from django.utils import timezone
 from ipware import get_client_ip
 
 from tools import forms, helpers, models
-from tools.ipv4 import calculate_subnet
 
 
 class HomePage(TemplateView):
