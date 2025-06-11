@@ -24,9 +24,9 @@ from tools.views import HomePage
 
 
 urlpatterns = [
-    path("panel/", admin.site.urls),
-    path("tools/", include("tools.urls")),
-    path("", HomePage.as_view(), name="main"),
+    path('panel/', admin.site.urls),
+    path('tools/', include('tools.urls')),
+    path('', HomePage.as_view(), name='main'),
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 
 

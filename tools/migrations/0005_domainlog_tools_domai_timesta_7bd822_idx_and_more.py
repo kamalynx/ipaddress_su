@@ -4,22 +4,21 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ("tools", "0004_domainlog_tools_domai_name_4a2534_idx_and_more"),
+        ('tools', '0004_domainlog_tools_domai_name_4a2534_idx_and_more'),
     ]
 
     operations = [
         migrations.AddIndex(
-            model_name="domainlog",
+            model_name='domainlog',
             index=models.Index(
-                fields=["timestamp"], name="tools_domai_timesta_7bd822_idx"
+                fields=['timestamp'], name='tools_domai_timesta_7bd822_idx'
             ),
         ),
         migrations.AddIndex(
-            model_name="iplog",
+            model_name='iplog',
             index=models.Index(
-                fields=["timestamp"], name="tools_iplog_timesta_767427_idx"
+                fields=['timestamp'], name='tools_iplog_timesta_767427_idx'
             ),
         ),
     ]

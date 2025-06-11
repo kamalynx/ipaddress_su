@@ -15,7 +15,7 @@ class SubnetInfo:
 
 def calculate_subnet(ipaddress: str, netmask: str) -> SubnetInfo:
     # Создаем объект сети
-    network = IPv4Network(f"{ipaddress}/{netmask}", strict=False)
+    network = IPv4Network(f'{ipaddress}/{netmask}', strict=False)
 
     # Возвращаем информацию о подсети в виде dataclass
     return SubnetInfo(
@@ -44,7 +44,7 @@ def get_subnet(ipaddress: str, netmask: int):
     }
 
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     # Пример использования
     # ~ ip = "192.168.1.0"
     # ~ subnet_mask = "255.255.255.0"

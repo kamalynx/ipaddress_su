@@ -31,3 +31,12 @@ dependencies = [
 DJANGO_SETTINGS_MODULE = "core.settings"
 # -- recommended but optional:
 python_files = ["test_*.py", "*_test.py", "testing/python/*.py", "*/tests*.py"]
+
+[tool.ruff]
+line-length = 79
+exclude = [".venv"]
+
+[tool.ruff.format]
+quote-style = "single"
+#indent-style = "tab"
+#docstring-code-format = true

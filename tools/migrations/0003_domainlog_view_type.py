@@ -4,20 +4,19 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ("tools", "0002_rename_domain_domainlog_name"),
+        ('tools', '0002_rename_domain_domainlog_name'),
     ]
 
     operations = [
         migrations.AddField(
-            model_name="domainlog",
-            name="view_type",
+            model_name='domainlog',
+            name='view_type',
             field=models.CharField(
-                choices=[("whois", "Whois"), ("nslookup", "ns lookup")],
+                choices=[('whois', 'Whois'), ('nslookup', 'ns lookup')],
                 max_length=16,
                 null=True,
-                verbose_name="тип представления",
+                verbose_name='тип представления',
             ),
         ),
     ]

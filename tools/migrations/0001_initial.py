@@ -5,17 +5,16 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     initial = True
 
     dependencies = []
 
     operations = [
         migrations.CreateModel(
-            name="DomainLog",
+            name='DomainLog',
             fields=[
                 (
-                    "id",
+                    'id',
                     models.UUIDField(
                         default=uuid6.uuid7,
                         editable=False,
@@ -23,23 +22,23 @@ class Migration(migrations.Migration):
                         serialize=False,
                     ),
                 ),
-                ("timestamp", models.DateTimeField(auto_now=True)),
+                ('timestamp', models.DateTimeField(auto_now=True)),
                 (
-                    "domain",
-                    models.CharField(max_length=255, verbose_name="домен"),
+                    'domain',
+                    models.CharField(max_length=255, verbose_name='домен'),
                 ),
             ],
             options={
-                "verbose_name": "Журнал доменов",
-                "ordering": ("-timestamp",),
-                "abstract": False,
+                'verbose_name': 'Журнал доменов',
+                'ordering': ('-timestamp',),
+                'abstract': False,
             },
         ),
         migrations.CreateModel(
-            name="IPLog",
+            name='IPLog',
             fields=[
                 (
-                    "id",
+                    'id',
                     models.UUIDField(
                         default=uuid6.uuid7,
                         editable=False,
@@ -47,18 +46,18 @@ class Migration(migrations.Migration):
                         serialize=False,
                     ),
                 ),
-                ("timestamp", models.DateTimeField(auto_now=True)),
+                ('timestamp', models.DateTimeField(auto_now=True)),
                 (
-                    "address",
+                    'address',
                     models.GenericIPAddressField(
-                        unpack_ipv4=True, verbose_name="IP адрес"
+                        unpack_ipv4=True, verbose_name='IP адрес'
                     ),
                 ),
             ],
             options={
-                "verbose_name": "Журнал IP",
-                "ordering": ("-timestamp",),
-                "abstract": False,
+                'verbose_name': 'Журнал IP',
+                'ordering': ('-timestamp',),
+                'abstract': False,
             },
         ),
     ]

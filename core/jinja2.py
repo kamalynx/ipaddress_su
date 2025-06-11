@@ -8,8 +8,8 @@ def environment(**options):
     env = Environment(**options)
     env.globals.update(
         {
-            "static": static,
-            "url": reverse,
+            'static': static,
+            'url': reverse,
         }
     )
     return env

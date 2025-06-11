@@ -8,19 +8,19 @@ class BaseLogModel(models.Model):
 
     class Meta:
         abstract = True
-        ordering = ("-timestamp",)
-        indexes = [models.Index(fields=("timestamp",))]
+        ordering = ('-timestamp',)
+        indexes = [models.Index(fields=('timestamp',))]
 
 
 class IPLog(BaseLogModel):
     address = models.GenericIPAddressField(
-        verbose_name="IP адрес", unpack_ipv4=True
+        verbose_name='IP адрес', unpack_ipv4=True
     )
 
     class Meta(BaseLogModel.Meta):
-        verbose_name = "Журнал IP"
+        verbose_name = 'Журнал IP'
         indexes = BaseLogModel.Meta.indexes + [
-            models.Index(fields=("address",))
+            models.Index(fields=('address',))
         ]
 
     def __str__(self):
@@ -29,21 +29,21 @@ class IPLog(BaseLogModel):
 
 class DomainLog(BaseLogModel):
     class ViewType(models.TextChoices):
-        WHOIS = "whois", "Whois"
-        NSLOOKUP = "nslookup", "ns lookup"
+        WHOIS = 'whois', 'Whois'
+        NSLOOKUP = 'nslookup', 'ns lookup'
 
-    name = models.CharField(max_length=255, verbose_name="домен")
+    name = models.CharField(max_length=255, verbose_name='домен')
     view_type = models.CharField(
         max_length=16,
         choices=ViewType,
-        verbose_name="тип представления",
+        verbose_name='тип представления',
         null=True,
     )
 
     class Meta(BaseLogModel.Meta):
-        verbose_name = "Журнал доменов"
+        verbose_name = 'Журнал доменов'
         indexes = BaseLogModel.Meta.indexes + [
-            models.Index(fields=("name", "view_type"))
+            models.Index(fields=('name', 'view_type'))
         ]
 
     def __str__(self):

@@ -42,12 +42,12 @@ def nslookup(domain):
     ipsv4, ipsv6 = None, None
 
     try:
-        ipsv4 = dns.resolver.resolve(domain, "a")
+        ipsv4 = dns.resolver.resolve(domain, 'a')
     except DNSException as err:
         ipsv4 = err
 
     try:
-        ipsv6 = dns.resolver.resolve(domain, "aaaa")
+        ipsv6 = dns.resolver.resolve(domain, 'aaaa')
     except DNSException as err:
         ipsv6 = err
 
@@ -55,7 +55,7 @@ def nslookup(domain):
 
 
 async def get_dns_records(domain):
-    common_records = ("a", "aaaa", "mx", "txt", "ns", "soa")
+    common_records = ('a', 'aaaa', 'mx', 'txt', 'ns', 'soa')
 
     tasks = [
         asyncio.create_task(
@@ -71,32 +71,32 @@ async def get_dns_records(domain):
 
 def get_ip_info(ipaddress: str) -> IPInfo | IPError:
     params = {
-        "lang": "ru",
-        "fields": ",".join(
+        'lang': 'ru',
+        'fields': ','.join(
             (
-                "status",
-                "message",
-                "country",
-                "countryCode",
-                "regionName",
-                "city",
-                "lat",
-                "lon",
-                "timezone",
-                "isp",
-                "org",
-                "reverse",
-                "mobile",
-                "proxy",
-                "query",
-                "as",
+                'status',
+                'message',
+                'country',
+                'countryCode',
+                'regionName',
+                'city',
+                'lat',
+                'lon',
+                'timezone',
+                'isp',
+                'org',
+                'reverse',
+                'mobile',
+                'proxy',
+                'query',
+                'as',
             )
         ),
     }
 
     with httpx.Client() as client:
         ipinfo = client.get(
-            f"http://ip-api.com/json/{ipaddress}", params=params
+            f'http://ip-api.com/json/{ipaddress}', params=params
         ).json()
 
     match ipinfo['status']:
@@ -108,5 +108,5 @@ def get_ip_info(ipaddress: str) -> IPInfo | IPError:
             return IPError(**ipinfo)
 
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     print(nslookup('ya.ru')[0])

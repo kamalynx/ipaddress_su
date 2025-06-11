@@ -14,13 +14,13 @@ from tools.ipv4 import calculate_subnet
 
 
 class HomePage(TemplateView):
-    template_name = "main.html"
+    template_name = 'main.html'
 
     def get_context_data(self, **kwargs):
         """Add client ip to context data."""
 
         client_ip = get_client_ip(self.request)[0]
-        kwargs["ipaddress"] = client_ip
+        kwargs['ipaddress'] = client_ip
 
         return super(HomePage, self).get_context_data(**kwargs)
 
@@ -28,98 +28,98 @@ class HomePage(TemplateView):
 def nslookup_view(request, domain: str = None):
     context = {}
 
-    if request.method == "POST":
+    if request.method == 'POST':
         form = forms.DomainForm(request.POST)
 
         if form.is_valid():
-            domain = form.cleaned_data.get("domain")
-            return redirect("tools:nslookup_with_domain", str(domain))
+            domain = form.cleaned_data.get('domain')
+            return redirect('tools:nslookup_with_domain', str(domain))
     else:
         form = forms.DomainForm()
 
     if domain is not None:
-        form = forms.DomainForm({"domain": domain})
+        form = forms.DomainForm({'domain': domain})
 
         if not validators.domain(domain):
-            raise Http404("Домен некорректен")
+            raise Http404('Домен некорректен')
 
         result = helpers.nslookup(domain)
-        context["domain"] = domain
-        context["ipsv4"] = result[0]
-        context["ipsv6"] = result[1]
+        context['domain'] = domain
+        context['ipsv4'] = result[0]
+        context['ipsv6'] = result[1]
 
         domain_model, created = models.DomainLog.objects.get_or_create(
-            name=domain, view_type="nslookup"
+            name=domain, view_type='nslookup'
         )
         domain_model.timestamp = timezone.now()
         domain_model.save()
 
-    context["form"] = form
-    context["log"] = models.DomainLog.objects.filter(
-        view_type="nslookup"
+    context['form'] = form
+    context['log'] = models.DomainLog.objects.filter(
+        view_type='nslookup'
     ).all()[:10]
-    return render(request, "tools/checkip.html", context=context)
+    return render(request, 'tools/checkip.html', context=context)
 
 
 def ipinfo_view(request):
-    if request.method == "POST":
+    if request.method == 'POST':
         form = forms.IPForm(request.POST)
 
         if form.is_valid():
-            ip = netaddr.IPAddress(form.cleaned_data.get("ipaddress"))
+            ip = netaddr.IPAddress(form.cleaned_data.get('ipaddress'))
 
-            if any([
-                ip.is_ipv4_private_use(),
-                ip.is_reserved(),
-                ip.is_loopback(),
-            ]):
+            if any(
+                [
+                    ip.is_ipv4_private_use(),
+                    ip.is_reserved(),
+                    ip.is_loopback(),
+                ]
+            ):
                 ip = get_client_ip(request)[0]  # works only on prod :)
 
-            return redirect("tools:ipinfo_with_ip", str(ip))
+            return redirect('tools:ipinfo_with_ip', str(ip))
     else:
         form = forms.IPForm()
 
-    context = {"form": form, "log": models.IPLog.objects.all()[:10]}
-    return render(request, "tools/ipinfo.html", context=context)
+    context = {'form': form, 'log': models.IPLog.objects.all()[:10]}
+    return render(request, 'tools/ipinfo.html', context=context)
 
 
 def ipinfo_with_ip(request, ip: str = None):
-
-    if request.method == "POST":
+    if request.method == 'POST':
         form = forms.IPForm(request.POST)
 
         if form.is_valid():
-            ip = form.cleaned_data.get("ipaddress")
+            ip = form.cleaned_data.get('ipaddress')
     else:
-        form = forms.IPForm({"ipaddress": ip})
+        form = forms.IPForm({'ipaddress': ip})
 
     ip_model, created = models.IPLog.objects.get_or_create(address=ip)
     ip_model.timestamp = timezone.now()
     ip_model.save()
 
     context = {
-        "result": helpers.get_ip_info(ip),
-        "form": form,
-        "ip": ip,
-        "log": models.IPLog.objects.all()[:10],
+        'result': helpers.get_ip_info(ip),
+        'form': form,
+        'ip': ip,
+        'log': models.IPLog.objects.all()[:10],
     }
-    return render(request, "tools/ipinfo.html", context=context)
+    return render(request, 'tools/ipinfo.html', context=context)
 
 
 def ipcalc_view(request):
     context = {}
 
-    if request.method == "POST":
-
+    if request.method == 'POST':
         form = forms.IPv4CalcForm(request.POST)
 
         if form.is_valid():
-            ipaddress = form.cleaned_data["ipaddress"]
-            cidr = form.cleaned_data["netmask"]
-            context["result"] = netaddr.IPNetwork(f"{ipaddress}/{cidr}")
+            ipaddress = form.cleaned_data['ipaddress']
+            cidr = form.cleaned_data['netmask']
+            context['result'] = netaddr.IPNetwork(f'{ipaddress}/{cidr}')
     else:
         form = forms.IPv4CalcForm()
 
-    context["form"] = form
+    context['form'] = form
 
-    return render(request, "tools/ipcalc.html", context=context)
+    return render(request, 'tools/ipcalc.html', context=context)
