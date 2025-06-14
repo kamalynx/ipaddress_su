@@ -17,4 +17,6 @@ urlpatterns = [
     path('ipinfo/', views.ipinfo_view, name='ipinfo'),
     path('ipinfo/<ip>/', views.ipinfo_with_ip, name='ipinfo_with_ip'),
     path('ipcalc/', views.ipcalc_view, name='ipcalc'),
+    path('whois/', views.whois_view, name='whois'),
+    path('whois/<domain>/', views.whois_with_domain, name='whois_with_domain'),
 ]

@@ -1,5 +1,6 @@
 import validators
 import netaddr
+import whois
 from django.shortcuts import render, redirect
 from django.http import Http404
 from django.views.generic import TemplateView
@@ -119,3 +120,47 @@ def ipcalc_view(request):
     context['form'] = form
 
     return render(request, 'tools/ipcalc.html', context=context)
+
+
+def whois_view(request):
+    if request.method == 'POST':
+        form = forms.DomainForm(request.POST)
+
+        if form.is_valid():
+            domain = form.cleaned_data.get('domain')
+
+            return redirect('tools:whois_with_domain', domain)
+    else:
+        form = forms.DomainForm()
+
+    context = {'form': form, 'log': models.DomainLog.objects.all()[:10]}
+    return render(request, 'tools/whois.html', context=context)
+
+
+def whois_with_domain(request, domain: str = None):
+    if request.method == 'POST':
+        form = forms.DomainForm(request.POST)
+
+        if form.is_valid():
+            domain = form.cleaned_data.get('domain')
+            return redirect('tools:whois_with_domain', domain)
+    else:
+        form = forms.DomainForm({'domain': domain})
+
+
+    try:
+        whois_data = whois.whois(domain).text
+    except whois.parser.PywhoisError as err:
+        whois_data = err
+
+    ip_model, created = models.DomainLog.objects.get_or_create(name=domain)
+    ip_model.timestamp = timezone.now()
+    ip_model.save()
+
+    context = {
+        'result': whois_data,
+        'form': form,
+        'domain': domain,
+        'log': models.DomainLog.objects.all()[:10],
+    }
+    return render(request, 'tools/whois.html', context=context)
