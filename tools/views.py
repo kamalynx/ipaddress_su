@@ -151,7 +151,7 @@ def whois_with_domain(request, domain: str = None):
     try:
         whois_data = whois.whois(domain).text
     except whois.parser.PywhoisError as err:
-        whois_data = err
+        raise Http404(err)
 
     ip_model, created = models.DomainLog.objects.get_or_create(name=domain)
     ip_model.timestamp = timezone.now()
